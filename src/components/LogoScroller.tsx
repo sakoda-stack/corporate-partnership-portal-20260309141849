@@ -1,5 +1,5 @@
 import React from 'react';
-import { LOGOS } from '../constants';
+import { LOGOS } from '../data/logos';
 
 export const LogoScroller: React.FC = () => {
   // Duplicate logos for infinite scroll effect (2 sets is enough for -50% translation)
