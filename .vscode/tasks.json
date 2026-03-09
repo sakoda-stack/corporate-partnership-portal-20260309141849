@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "install",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "1. 準備：ライブラリのインストール",
+      "detail": "初回のみ実行してください"
+    },
+    {
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "label": "2. 実行：ポータルを起動する",
+      "detail": "ブラウザで確認しながら編集できます"
+    }
+  ]
+}

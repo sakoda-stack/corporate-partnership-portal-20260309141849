@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法人制度利用管理 | LEBEN HOME BUILD</title>
+<!--
+  LEBEN HOME BUILD 法人提携営業管理システム v5
+  GitHub Pages 構成：
+    /index.html     ← このファイル
+    /companies.csv  ← 管理者が更新するCSV（push → 全員に即反映）
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cb:#F5F3EF;--cs:#FFF;--ch:#1C2420;--ch2:#2D3A35;
+  --t1:#191715;--t2:#766E64;--t3:#A8A09A;
+  --ac:#8B7355;--acl:#C4AA8A;
+  --bd:#DDD9D3;--bm:#C6C0B8;--hv:#F0ECE5;--bg:#FAF8F3;
+  --er:#8B3A3A;--wn:#9B7010;--ok:#4A7C6F;
+  --ff:'Noto Serif JP',serif;--fs:'Noto Sans JP',sans-serif;
+  --r:2px;--tr:.15s ease
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px}
+body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+.hd{background:var(--ch);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:54px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(255,255,255,.06)}
+.hl{font-family:var(--ff);font-size:13px;letter-spacing:.18em;color:#F5F3EF;line-height:1}
+.hs{font-size:10px;color:var(--acl);letter-spacing:.2em;font-weight:300;margin-top:2px}
+.hst{font-size:10px;letter-spacing:.09em}
+.hst.ok{color:rgba(180,210,180,.75)}.hst.wn{color:rgba(210,170,100,.85)}.hst.init{color:rgba(255,255,255,.3)}
+.hd-r{display:flex;align-items:center;gap:12px}
+.hd-back{display:inline-flex;align-items:center;height:24px;padding:0 10px;border:1px solid rgba(255,255,255,.28);color:#F5F3EF;text-decoration:none;font-size:10px;letter-spacing:.08em;transition:all var(--tr)}
+.hd-back:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45)}
+
+/* STEP BAR */
+.sb{background:var(--cs);border-bottom:1px solid var(--bd);padding:0 40px;display:flex;align-items:center;height:44px}
+.si{display:flex;align-items:center;gap:5px;color:var(--t3);font-size:11px;white-space:nowrap;letter-spacing:.04em;cursor:pointer;transition:opacity var(--tr)}.si:hover{opacity:.75}
+.si.done{color:var(--ac)}.si.active{color:var(--t1);font-weight:500}
+.sn{width:19px;height:19px;border:1px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.si.done .sn{background:var(--ac);border-color:var(--ac);color:#fff}
+.ss{width:22px;height:1px;background:var(--bd);margin:0 6px}
+
+/* LAYOUT */
+.lay{max-width:1080px;margin:0 auto;padding:22px 40px 56px}
+.sh{margin-bottom:18px}
+.shk{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ac);margin-bottom:3px}
+.sht{font-family:var(--ff);font-size:19px;font-weight:400;letter-spacing:.06em;border-bottom:1px solid var(--bd);padding-bottom:10px}
+.bc{display:flex;align-items:center;gap:6px;padding:4px 0 15px;font-size:11px;color:var(--t3)}
+.bc a{cursor:pointer;transition:color var(--tr)}.bc a:hover{color:var(--ac)}
+.bc span{color:var(--t2)}.bc i{color:var(--bm)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0 15px;height:37px;border:1px solid;font-family:var(--fs);font-size:12.5px;font-weight:500;letter-spacing:.05em;cursor:pointer;transition:all var(--tr);border-radius:var(--r);white-space:nowrap}
+.bp{background:var(--ch);border-color:var(--ch);color:#fff}.bp:hover{background:var(--ch2)}
+.bs{background:transparent;border-color:var(--bm);color:var(--t2)}.bs:hover{border-color:var(--t2);color:var(--t1)}
+.ba{background:var(--ac);border-color:var(--ac);color:#fff}.ba:hover{background:#7A6347}
+.bg{background:transparent;border-color:transparent;color:var(--t2);padding:0 10px}.bg:hover{border-color:var(--bd);color:var(--t1)}
+.box-link{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border:1px solid var(--acl);border-radius:var(--r);font-size:11px;color:var(--ac);text-decoration:none;transition:all var(--tr);background:rgba(139,115,85,.05)}
+.box-link:hover{background:rgba(139,115,85,.12);border-color:var(--ac)}
+.box-link::before{content:'📁';font-size:10px}
+.bsm{height:31px;padding:0 11px;font-size:11.5px}.bxs{height:26px;padding:0 9px;font-size:11px}
+
+/* SEARCH */
+.srch-top{background:var(--cs);border:1px solid var(--bd);padding:14px 22px}
+.mode-tabs{display:flex;gap:0;margin-bottom:10px;border-bottom:1px solid var(--bd)}
+.mtab{padding:5px 16px;font-size:11.5px;font-weight:500;cursor:pointer;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all var(--tr);letter-spacing:.04em}
+.mtab.on{color:var(--t1);border-bottom-color:var(--ac)}
+.mtab:hover{color:var(--t1)}
+.sr{display:flex;align-items:flex-end;gap:9px}
+.sw{flex:1;border-bottom:2px solid var(--bm);display:flex;transition:border-color var(--tr)}
+.sw:focus-within{border-bottom-color:var(--ac)}
+.sin{flex:1;border:none;background:transparent;font-family:var(--fs);font-size:15px;color:var(--t1);padding:5px 0;outline:none}
+.sin::placeholder{color:var(--t3);font-size:13px}
+
+/* 特典額クイック計算 */
+.qc{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.qc-ttl{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--t2);white-space:nowrap}
+.qc-grp{display:flex;align-items:center;gap:7px}
+.qc-in{width:140px;border:1px solid var(--bd);border-radius:var(--r);padding:5px 8px;font-family:var(--fs);font-size:13px;outline:none;transition:border-color var(--tr);background:var(--cs)}
+.qc-in:focus{border-color:var(--ac)}
+.qc-lbl{font-size:11px;color:var(--t2);white-space:nowrap}
+.qc-sep{height:22px;width:1px;background:var(--bd)}
+.qc-res{font-size:16px;font-weight:300;font-family:var(--ff);color:var(--ac)}
+.qc-res.p{font-size:12px;font-weight:400;font-family:var(--fs);color:var(--t3)}
+.qc-note{font-size:10.5px;color:var(--t3);margin-left:auto}
+
+/* TABLE */
+.rm{display:flex;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd)}
+.rc{font-size:11.5px;color:var(--t2)}.rc strong{font-size:16px;font-weight:500;color:var(--t1);margin:0 2px}
+.tw{background:var(--cs);border:1px solid var(--bd);border-top:none;overflow-x:auto}
+.ct{width:100%;border-collapse:collapse;font-size:12px}
+.ct thead tr{background:#EDEAE4}
+.ct th{padding:7px 10px;font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--t2);text-align:left;border-bottom:1px solid var(--bm);white-space:nowrap}
+.ct td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.ct tbody tr:last-child td{border-bottom:none}
+.ct tbody tr:hover td{background:var(--hv);cursor:pointer}
+.tn{font-weight:500;font-size:12.5px}.td2{font-size:11.5px;color:var(--t2)}
+.tac{color:var(--ac);font-weight:500}
+.nr{background:var(--cs);border:1px solid var(--bd);border-top:none;text-align:center;padding:50px;color:var(--t3);font-size:13px}
+
+/* DETAIL PANEL */
+.dp{background:var(--cs);border:1px solid var(--bd);margin-bottom:13px}
+.dph{background:#EDEAE4;border-bottom:1px solid var(--bd);padding:8px 18px;display:flex;align-items:center;justify-content:space-between}
+.dpn{font-family:var(--ff);font-size:14px;letter-spacing:.04em}
+.dpb{padding:12px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:9px 14px}
+.dfl{font-size:10px;letter-spacing:.13em;color:var(--t3);margin-bottom:1px;text-transform:uppercase}
+.dfv{font-size:13px}.dfv.ac{color:var(--ac);font-weight:500}
+
+/* FORMS */
+.fs-box{background:var(--cs);border:1px solid var(--bd);margin-bottom:12px}
+.fs-h{padding:8px 18px;border-bottom:1px solid var(--bd);font-family:var(--ff);font-size:12.5px;font-weight:400;color:var(--t2);letter-spacing:.06em;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fs-b{padding:13px 18px;display:grid;gap:11px 18px}
+.g1{grid-template-columns:1fr}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+.fg{display:flex;flex-direction:column;gap:4px}
+.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}
+.fl{font-size:11px;font-weight:500;letter-spacing:.09em;color:var(--t2)}
+.req{color:var(--er);margin-left:3px;font-size:10px}
+.fi,.fsel{border:1px solid var(--bd);border-radius:var(--r);background:var(--cs);font-family:var(--fs);font-size:13.5px;color:var(--t1);padding:6px 8px;outline:none;transition:border-color var(--tr),box-shadow var(--tr);width:100%}
+.fi:focus,.fsel:focus{border-color:var(--ac);box-shadow:0 0 0 2px rgba(139,115,85,.1)}
+.fi::placeholder{color:var(--t3);font-size:12px}
+.fh{font-size:10.5px;color:var(--t3);line-height:1.45}
+
+/* 計算バナー */
+.cbanner{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:10px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.cbi{display:flex;align-items:baseline;gap:6px}
+.cbl{font-size:11px;color:var(--t2);white-space:nowrap}
+.cbv{font-size:18px;font-weight:300;color:var(--ac);font-family:var(--ff)}
+.cbv.p{font-size:12.5px;font-weight:400;font-family:var(--fs);color:var(--t3)}
+.cb-sep{height:26px;width:1px;background:var(--bd)}
+.cbsub{font-size:10px;color:var(--t3);margin-left:auto}
+
+/* 自動計算表示 */
+.cd{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:6px 8px;font-size:14px;font-weight:500;color:var(--ac);min-height:34px;display:flex;align-items:center}
+.cd.p{color:var(--t3);font-weight:400;font-size:12px}
+
+/* 手付・中間グリッド */
+.pg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--bm)}
+.pc{border-right:1px solid var(--bm)}.pc:last-child{border-right:none}
+.pch{background:#EDEAE4;padding:5px 11px;font-size:11px;font-weight:500;color:var(--t2);letter-spacing:.08em;border-bottom:1px solid var(--bm)}
+.pr{display:grid;grid-template-columns:68px 1fr;border-bottom:1px solid var(--bd)}
+.pr:last-child{border-bottom:none}
+.pl{background:#F6F4EF;padding:5px 8px;font-size:11px;color:var(--t2);border-right:1px solid var(--bd);display:flex;align-items:center}
+.pin{display:flex;align-items:center;gap:5px;padding:3px 6px}
+.pfi{flex:1;border:1px solid var(--bd);border-radius:var(--r);padding:4px 7px;font-family:var(--fs);font-size:13px;outline:none;min-width:0;transition:border-color var(--tr);background:var(--cs)}
+.pfi:focus{border-color:var(--ac)}.pfi.ro{background:var(--bg);color:var(--ac);font-weight:500}
+.pu{font-size:11px;color:var(--t2);white-space:nowrap}
+
+/* prefix/suffix 入力 */
+.pfx-wrap{display:flex;align-items:center;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;background:var(--cs);transition:border-color var(--tr),box-shadow var(--tr)}
+.pfx-wrap:focus-within{border-color:var(--ac);box-shadow:0 0 0 2px rgba(139,115,85,.1)}
+.pfx-txt{background:#F6F4EF;padding:6px 8px;font-size:12px;color:var(--t2);white-space:nowrap;border-right:1px solid var(--bd);flex-shrink:0}
+.sfx-txt{background:#F6F4EF;padding:6px 8px;font-size:12px;color:var(--t2);white-space:nowrap;border-left:1px solid var(--bd);flex-shrink:0}
+.pfx-fi{flex:1;border:none;background:transparent;font-family:var(--fs);font-size:13.5px;color:var(--t1);padding:6px 8px;outline:none;min-width:0}
+.pfx-fi::placeholder{color:var(--t3);font-size:12px}
+/* ローン */
+.lg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.li{border:1px solid var(--bd)}.li-h{background:#EDEAE4;padding:5px 11px;font-size:11px;font-weight:500;color:var(--t2);letter-spacing:.08em;border-bottom:1px solid var(--bd)}
+.li-b{padding:9px 11px;display:flex;flex-direction:column;gap:7px}
+
+/* 最終残金 */
+.sr-row{display:flex;align-items:center;gap:10px;padding:10px 0 2px;flex-wrap:wrap;border-top:1px solid var(--bd);margin-top:5px}
+.sr-lbl{font-size:12px;font-weight:500;color:var(--t2);letter-spacing:.06em;white-space:nowrap}
+.sr-val{font-size:21px;font-weight:300;color:var(--ac);font-family:var(--ff)}
+.sr-val.neg{color:var(--er)}
+
+/* チェック */
+.ckg{display:flex;gap:14px;flex-wrap:wrap}
+.ck{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--t2);cursor:pointer;user-select:none}
+.ck input{accent-color:var(--ac);width:14px;height:14px;cursor:pointer}
+
+/* サービスメーター */
+.sm{background:var(--cs);border:1px solid var(--bd);padding:15px 18px;margin-bottom:12px}
+.smh{font-family:var(--ff);font-size:12.5px;color:var(--t2);border-bottom:1px solid var(--bd);padding-bottom:8px;margin-bottom:10px}
+/* 確認物件：左詰め・大きめ */
+.sm-prop{margin-top:6px;font-size:14px;color:var(--t1);letter-spacing:.04em;font-weight:500}
+.sm-prop span{color:var(--ac)}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:9px}
+.mn{font-size:10px;letter-spacing:.12em;color:var(--t3);margin-bottom:3px;text-transform:uppercase}
+.mi{display:flex;align-items:center;gap:5px}
+.mii{flex:1;border:1px solid var(--bd);border-radius:var(--r);padding:6px 8px;font-size:18px;font-weight:300;font-family:var(--fs);outline:none;transition:border-color var(--tr);background:var(--cs);min-width:0}
+.mii:focus{border-color:var(--ac)}.mii.ro{background:var(--bg);color:var(--ac);font-weight:500}
+.mu{font-size:11px;color:var(--t2);white-space:nowrap}
+.mbar{height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
+.mbf{height:100%;background:var(--ac);transition:width .4s;border-radius:2px}
+.mbf.wn{background:var(--wn)}.mbf.ov{background:var(--er)}
+
+/* 事業利益 */
+.profit-box{background:var(--cs);border:1px solid var(--bd);margin-bottom:12px}
+
+/* 添付チェックリスト */
+.att-list{display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.att-item{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid var(--bd);background:var(--cb)}
+.att-item.done{background:#F0F5F0;border-color:#90C090}
+.att-item input{accent-color:var(--ok);width:16px;height:16px;cursor:pointer;flex-shrink:0}
+.att-lbl{font-size:12.5px;font-weight:500;color:var(--t1);flex:1}
+.att-req{font-size:10px;color:var(--er);margin-left:4px}
+
+/* アクションバー */
+.ab{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;background:var(--cs);border:1px solid var(--bd);border-top:2px solid var(--ch);margin-top:13px}
+.abl,.abr{display:flex;align-items:center;gap:8px}
+
+/* 稟議管理番号 */
+.rin-wrap{background:var(--bg);border:1px solid var(--acl);padding:13px 18px;margin-bottom:13px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rin-lbl{font-size:12px;font-weight:500;color:var(--t2);letter-spacing:.06em;white-space:nowrap}
+.rin-in{border:1px solid var(--bm);border-radius:var(--r);padding:7px 10px;font-family:var(--fs);font-size:14px;width:200px;outline:none;transition:border-color var(--tr)}
+.rin-in:focus{border-color:var(--ac)}
+.rin-note{font-size:10.5px;color:var(--t3)}
+
+/* Loading */
+.ld{position:fixed;inset:0;background:rgba(245,243,239,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:12px}
+.lds{width:34px;height:34px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ldt{font-size:11.5px;color:var(--t2);letter-spacing:.1em}
+
+/* デスクネッツ */
+.dw{background:var(--cs);border:1px solid var(--bd);margin-bottom:12px}
+.dwh{background:#EDEAE4;border-bottom:1px solid var(--bd);padding:8px 18px;display:flex;align-items:center;justify-content:space-between}
+.dwt{font-family:var(--ff);font-size:13px;color:var(--t2)}
+.dw-body{padding:15px 18px}
+.dta{width:100%;border:1px solid var(--bd);border-radius:var(--r);padding:9px 11px;font-family:var(--fs);font-size:12.5px;color:var(--t1);line-height:1.85;resize:vertical;outline:none;transition:border-color var(--tr)}
+.dta:focus{border-color:var(--ac)}
+.dfi{border:1px solid var(--bd);border-radius:var(--r);padding:6px 9px;font-family:var(--fs);font-size:13px;width:100%;outline:none;transition:border-color var(--tr)}
+.dfi:focus{border-color:var(--ac)}
+
+/* ================================================================
+   稟議書 PDF A4
+================================================================ */
+.ap-wrap{max-width:740px;margin:12px auto 0}
+.ap{background:#fff;border:1px solid var(--bd);padding:22px 28px;font-family:var(--fs)}
+
+/* 枠外 上部 */
+.ap-top-out{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:10.5px;color:var(--t2)}
+.ap-top-out strong{font-weight:600;color:var(--t1)}
+
+/* タイトル */
+.ap-title{font-family:var(--ff);font-size:17px;font-weight:600;letter-spacing:.22em;text-align:center;padding-bottom:7px;border-bottom:2px solid var(--t1);margin-bottom:10px}
+
+/* ヘッダー行 */
+.ap-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;gap:16px;font-size:10.5px;color:var(--t2);line-height:1.9}
+
+/* 共通テーブル */
+.at{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:7px}
+.at th{background:#F0EDE7;padding:4px 9px;border:1px solid var(--bm);font-weight:500;text-align:left;color:var(--t2);font-size:10px;white-space:nowrap;width:100px}
+.at td{padding:4px 9px;border:1px solid var(--bm);line-height:1.45}
+.at .mn{font-weight:500;color:var(--ac)}
+.at .formula{font-size:9.5px;color:var(--t2);font-style:italic}
+
+/* 見出し */
+.ash{font-size:10px;font-weight:600;letter-spacing:.1em;border-left:3px solid var(--ac);padding-left:7px;margin:7px 0 4px;color:var(--t1)}
+
+/* 2カラム（契約内容 + ローン） */
+.a2{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bm);margin-bottom:7px}
+.a2c{border-right:1px solid var(--bm)}.a2c:last-child{border-right:none}
+.a2h{background:#F0EDE7;padding:4px 9px;font-size:9.5px;font-weight:500;color:var(--t2);letter-spacing:.08em;border-bottom:1px solid var(--bm)}
+.a2t{width:100%;border-collapse:collapse;font-size:10px}
+.a2t th{background:#F6F4EF;width:72px;padding:3px 7px;border-bottom:1px solid var(--bm);border-right:1px solid var(--bm);font-weight:500;font-size:9.5px;color:var(--t2)}
+.a2t td{padding:3px 7px;border-bottom:1px solid var(--bm);font-size:10px}
+.a2t tr:last-child th,.a2t tr:last-child td{border-bottom:none}
+.a2t .mn{font-weight:500;color:var(--ac)}
+
+/* 添付書類行 */
+.ap-att{display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:4px}
+.ap-att-item{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--t2)}
+.ap-att-item .chk-box{width:10px;height:10px;border:1px solid var(--bm);display:inline-block;flex-shrink:0}
+.ap-att-item.checked .chk-box{background:var(--ok);border-color:var(--ok)}
+
+/* フッター */
+.ap-foot{margin-top:8px;padding-top:6px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;font-size:9.5px;color:var(--t3)}
+
+/* UTILS */
+.hidden{display:none!important}
+.mt3{margin-top:11px}.mt4{margin-top:15px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* PRINT */
+@media print{
+  @page{size:A4 portrait;margin:7mm 9mm}
+  .hd,.sb,.bc,.ab,.no-print,.ld,
+  #scr1,#scr2,#scr3,#scr4,#scr6{display:none!important}
+  #scr5{display:block!important}
+  body{background:#fff!important}
+  .lay{max-width:100%;padding:0;margin:0}
+  .ap-wrap{max-width:100%;margin:0}
+  .ap{border:none!important;padding:0!important;font-size:7.5pt}
+  .ap-title{font-size:13pt}
+  .at th,.at td{font-size:7pt;padding:2.5px 6px}
+  .ash{font-size:8pt;margin:4px 0 2px}
+  .a2h{font-size:8pt;padding:2.5px 7px}
+  .a2t th,.a2t td{font-size:7pt;padding:2.5px 5px}
+  .a2{margin-bottom:4px}.at{margin-bottom:4px}
+  .ap-meta{margin-bottom:6px;font-size:7.5pt;line-height:1.7}
+  .ap-top-out{font-size:8pt;margin-bottom:4px}
+  .ap-att-item{font-size:7.5pt}
+}
+</style>
+</head>
+<body>
+
+<div class="ld" id="ldOv"><div class="lds"></div><div class="ldt">企業データを読み込んでいます…</div></div>
+
+<header class="hd">
+  <div><div class="hl">LEBEN HOME BUILD</div><div class="hs">法人提携営業管理システム</div></div>
+  <div class="hd-r">
+    <a class="hd-back notranslate" translate="no" href="/index.html">PORTAL</a>
+    <div class="hst init" id="hdSt">読込中…</div>
+  </div>
+</header>
+
+<nav class="sb">
+  <div class="si" id="si1" onclick="goTo(1)"><div class="sn">1</div><span>企業検索</span></div><div class="ss"></div>
+  <div class="si" id="si2" onclick="goTo(2)"><div class="sn">2</div><span>物件情報</span></div><div class="ss"></div>
+  <div class="si" id="si3" onclick="goTo(3)"><div class="sn">3</div><span>契約情報</span></div><div class="ss"></div>
+  <div class="si" id="si4" onclick="goTo(4)"><div class="sn">4</div><span>特典・サービス</span></div><div class="ss"></div>
+  <div class="si" id="si5" onclick="goTo(5)"><div class="sn">5</div><span>稟議書</span></div><div class="ss"></div>
+  <div class="si" id="si6" onclick="goTo(6)"><div class="sn">6</div><span>デスクネッツ</span></div>
+</nav>
+
+<div class="lay">
+
+<!-- ================================================================
+  STEP 1: 企業検索
+================================================================ -->
+<div id="scr1">
+  <div class="sh"><div class="shk">Partner Company Search</div><div class="sht">提携企業検索</div></div>
+
+  <div class="srch-top">
+    <!-- 検索モード切替 -->
+    <div class="mode-tabs">
+      <div class="mtab on" id="tab1" onclick="setMode('name')">勤め先会社名で検索</div>
+      <div class="mtab" id="tab2" onclick="setMode('dept')">提携窓口会社名で検索</div>
+    </div>
+    <div class="sr">
+      <div class="sw">
+        <input type="text" class="sin" id="srchIn"
+          placeholder="例：NEC、ホンダ、三菱、東京海上…" autocomplete="off">
+      </div>
+      <button class="btn bp" onclick="doSearch()">検索</button>
+      <button class="btn bs" onclick="clrSearch()">クリア</button>
+    </div>
+  </div>
+
+  <!-- 特典額クイック計算 -->
+  <div class="qc">
+    <div class="qc-ttl">特典額クイック確認</div>
+    <div class="qc-grp">
+      <span class="qc-lbl">販売価格（万円）</span>
+      <input type="number" class="qc-in" id="qcPrice" placeholder="例：6490"
+        oninput="recalcQC()">
+      <span class="qc-lbl">万円</span>
+    </div>
+    <div class="qc-sep"></div>
+    <div class="qc-grp">
+      <span class="qc-lbl">→　特典額</span>
+      <span class="qc-res p" id="qcResult">価格を入力してください</span>
+    </div>
+    <div class="qc-sep"></div>
+    <div class="qc-grp">
+      <span class="qc-lbl">建物消費税（万円）</span>
+      <input type="number" class="qc-in" id="qcTax" placeholder="例：217.5"
+        oninput="recalcQC()">
+    </div>
+    <div class="qc-grp">
+      <span class="qc-lbl">→　手数料額</span>
+      <span class="qc-res p" id="qcFeeResult">消費税も入力</span>
+    </div>
+    <div class="qc-note" id="qcRateNote">特典率 0.5%（標準）で計算中</div>
+  </div>
+
+  <div class="rm"><div class="rc"><strong id="rCnt">0</strong> 件</div></div>
+  <div class="tw">
+    <table class="ct" id="coTbl">
+      <thead><tr>
+        <th style="min-width:185px">勤め先会社名</th>
+        <th style="min-width:185px">提携窓口会社名</th>
+        <th style="min-width:62px">担当名</th>
+        <th style="min-width:100px">連絡先</th>
+        <th style="min-width:55px">特典率</th>
+        <th style="min-width:55px">手数料率</th>
+        <th style="min-width:88px">確認方法</th>
+        <th style="min-width:46px"></th>
+      </tr></thead>
+      <tbody id="coBody"></tbody>
+    </table>
+    <div class="nr hidden" id="noRes">該当する企業が見つかりませんでした。</div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  STEP 2: 物件情報
+================================================================ -->
+<div id="scr2" class="hidden">
+  <div class="bc no-print">
+    <a onclick="goTo(1)">企業検索</a><i>›</i><span id="bc2">物件情報</span>
+  </div>
+  <div class="sh"><div class="shk">Property Information</div><div class="sht">物件情報入力</div></div>
+
+  <div class="dp">
+    <div class="dph">
+      <div class="dpn" id="dpName">—</div>
+      <button class="btn bg bsm" onclick="goTo(1)">企業を変更</button>
+    </div>
+    <div class="dpb">
+      <div><div class="dfl">提携窓口会社名</div><div class="dfv" id="dpDept">—</div></div>
+      <div><div class="dfl">担当名</div><div class="dfv" id="dpContact">—</div></div>
+      <div><div class="dfl">連絡先</div><div class="dfv" id="dpPhone">—</div></div>
+      <div><div class="dfl">対象確認方法</div><div class="dfv" id="dpConf">—</div></div>
+      <div><div class="dfl">特典率</div><div class="dfv ac" id="dpRate">—</div></div>
+      <div><div class="dfl">手数料率</div><div class="dfv" id="dpFee">—</div></div>
+      <div><div class="dfl">対象者</div><div class="dfv" id="dpTgt">—</div></div>
+      <div><div class="dfl">紹介状提出期限</div><div class="dfv" id="dpDl">—</div></div>
+    </div>
+  </div>
+
+  <div class="fs-box">
+    <div class="fs-h">物件情報</div>
+    <div class="fs-b g4">
+      <div class="fg">
+        <label class="fl">物件名<span class="req">*</span></label>
+        <div class="pfx-wrap">
+          <span class="pfx-txt">レーベンプラッツ</span>
+          <input type="text" class="pfx-fi" id="fProp" placeholder="新松戸">
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">号棟</label>
+        <div class="pfx-wrap">
+          <input type="text" class="pfx-fi" id="fUnit" placeholder="19">
+          <span class="sfx-txt">号棟</span>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">営業担当<span class="req">*</span></label>
+        <input type="text" class="fi" id="fSales" placeholder="山田 太郎">
+      </div>
+      <div class="fg"><!-- spacer --></div>
+    </div>
+  </div>
+
+  <div class="ab no-print">
+    <div class="abl"><button class="btn bs" onclick="goTo(1)">← 企業選択に戻る</button></div>
+    <div class="abr"><button class="btn bp" onclick="proceedStep2()">次へ（契約情報入力）→</button></div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  STEP 3: 契約情報
+================================================================ -->
+<div id="scr3" class="hidden">
+  <div class="bc no-print">
+    <a onclick="goTo(1)">企業検索</a><i>›</i>
+    <a onclick="goTo(2)">物件情報</a><i>›</i>
+    <span>契約情報</span>
+  </div>
+  <div class="sh"><div class="shk">Contract Information</div><div class="sht">契約情報入力</div></div>
+
+  <!-- 顧客・日程 -->
+  <div class="fs-box">
+    <div class="fs-h">顧客・日程</div>
+    <div class="fs-b g3">
+      <div class="fg">
+        <label class="fl">顧客名①<span class="req">*</span></label>
+        <input type="text" class="fi" id="fB1" placeholder="草野　正">
+      </div>
+      <div class="fg">
+        <label class="fl">顧客名②</label>
+        <input type="text" class="fi" id="fB2" placeholder="草野　雅子">
+      </div>
+      <div class="fg"><!-- spacer --></div>
+      <div class="fg">
+        <label class="fl">契約日<span class="req">*</span></label>
+        <input type="date" class="fi" id="fCD">
+      </div>
+      <div class="fg">
+        <label class="fl">引渡予定年月</label>
+        <input type="month" class="fi" id="fDM">
+      </div>
+      <div class="fg">
+        <label class="fl">引渡時期</label>
+        <select class="fsel" id="fDT">
+          <option value="">選択</option>
+          <option value="上旬">上旬</option>
+          <option value="中旬">中旬</option>
+          <option value="下旬">下旬</option>
+          <option value="予定">予定</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 販売価格 -->
+  <div class="fs-box">
+    <div class="fs-h">
+      販売価格・消費税
+      <a class="box-link" href="https://mirarth-grp.box.com/s/275ay629sctt1dhqsbxobufv5e2hgb5v" target="_blank">消費税計算書を確認</a>
+    </div>
+    <div class="fs-b g2">
+      <div class="fg">
+        <label class="fl">販売価格（税込）<span class="req">*</span>
+          <span style="font-weight:400;color:var(--t3);margin-left:4px">万円　例：6490</span></label>
+        <input type="number" class="fi" id="fPrice" placeholder="6490"
+          oninput="recalcAll()">
+      </div>
+      <div class="fg">
+        <label class="fl">建物消費税
+          <span style="font-weight:400;color:var(--t3);margin-left:4px">万円　例：217.5</span></label>
+        <input type="number" class="fi" id="fTax" placeholder="217.5"
+          oninput="recalcAll()">
+        <div class="fh">税抜価格 ＝ 販売価格 − 建物消費税</div>
+      </div>
+    </div>
+    <!-- 特典額・手数料バナー -->
+    <div class="cbanner">
+      <div class="cbi">
+        <span class="cbl">特典額</span>
+        <span class="cbv p" id="cbB">価格を入力してください</span>
+      </div>
+      <div class="cb-sep"></div>
+      <div class="cbi">
+        <span class="cbl">手数料額</span>
+        <span class="cbv p" id="cbF">価格・消費税を入力してください</span>
+      </div>
+      <div class="cbsub">特典額＝販売価格(円)×特典率　／　手数料額＝税抜価格(円)×手数料率×1.1</div>
+    </div>
+  </div>
+
+  <!-- 契約内容（現金分） -->
+  <div class="fs-box">
+    <div class="fs-h">契約内容（現金分）</div>
+    <div class="fs-b g1">
+      <div class="pg">
+        <div class="pc">
+          <div class="pch">手 付 金</div>
+          <div class="pr"><div class="pl">頭 金</div>
+            <div class="pin"><input type="number" class="pfi" id="pTA" placeholder="0" oninput="recalcPay()"><span class="pu">万円</span></div></div>
+          <div class="pr"><div class="pl">諸費用</div>
+            <div class="pin"><input type="number" class="pfi" id="pTS" placeholder="0" oninput="recalcPay()"><span class="pu">万円</span></div></div>
+          <div class="pr" style="background:var(--bg)"><div class="pl" style="font-weight:500;color:var(--t1)">合 計</div>
+            <div class="pin"><input type="number" class="pfi ro" id="pTT" readonly><span class="pu">万円</span></div></div>
+        </div>
+        <div class="pc">
+          <div class="pch">中 間 金</div>
+          <div class="pr"><div class="pl">頭 金</div>
+            <div class="pin"><input type="number" class="pfi" id="pCA" placeholder="0" oninput="recalcPay()"><span class="pu">万円</span></div></div>
+          <div class="pr"><div class="pl">諸費用</div>
+            <div class="pin"><input type="number" class="pfi" id="pCS" placeholder="0" oninput="recalcPay()"><span class="pu">万円</span></div></div>
+          <div class="pr" style="background:var(--bg)"><div class="pl" style="font-weight:500;color:var(--t1)">合 計</div>
+            <div class="pin"><input type="number" class="pfi ro" id="pCT" readonly><span class="pu">万円</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ローン状況 -->
+  <div class="fs-box">
+    <div class="fs-h">ローン状況</div>
+    <div class="fs-b g1">
+      <div class="lg">
+        <div class="li"><div class="li-h">ローン ①</div>
+          <div class="li-b">
+            <div class="fg"><label class="fl">銀行名</label>
+              <input type="text" class="fi" id="l1b" placeholder="〇〇銀行"></div>
+            <div class="fg"><label class="fl">借入額（万円）</label>
+              <input type="number" class="fi" id="l1a" placeholder="0" oninput="recalcSaishuu()"></div>
+            <label class="ck"><input type="checkbox" id="l1u"> 未内定</label>
+          </div></div>
+        <div class="li"><div class="li-h">ローン ②</div>
+          <div class="li-b">
+            <div class="fg"><label class="fl">銀行名</label>
+              <input type="text" class="fi" id="l2b" placeholder="〇〇銀行"></div>
+            <div class="fg"><label class="fl">借入額（万円）</label>
+              <input type="number" class="fi" id="l2a" placeholder="0" oninput="recalcSaishuu()"></div>
+            <label class="ck"><input type="checkbox" id="l2u"> 未内定</label>
+          </div></div>
+        <div class="li"><div class="li-h">ローン ③</div>
+          <div class="li-b">
+            <div class="fg"><label class="fl">銀行名</label>
+              <input type="text" class="fi" id="l3b" placeholder="〇〇銀行"></div>
+            <div class="fg"><label class="fl">借入額（万円）</label>
+              <input type="number" class="fi" id="l3a" placeholder="0" oninput="recalcSaishuu()"></div>
+            <label class="ck"><input type="checkbox" id="l3u"> 未内定</label>
+          </div></div>
+      </div>
+      <div class="sr-row">
+        <div class="sr-lbl">最終残金（自動計算）</div>
+        <div class="sr-val" id="saishuuDisp">— 万円</div>
+        <div class="fh">＝ 販売価格（−値引）− 手付合計 − 中間合計 − ローン合計　※値引はSTEP4で入力後に更新</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ab no-print">
+    <div class="abl"><button class="btn bs" onclick="goTo(2)">← 物件情報に戻る</button></div>
+    <div class="abr"><button class="btn bp" onclick="proceedStep3()">次へ（特典・サービス管理）→</button></div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  STEP 4: 特典・サービス管理
+================================================================ -->
+<div id="scr4" class="hidden">
+  <div class="bc no-print">
+    <a onclick="goTo(1)">企業検索</a><i>›</i>
+    <a onclick="goTo(2)">物件情報</a><i>›</i>
+    <a onclick="goTo(3)">契約情報</a><i>›</i>
+    <span>特典・サービス</span>
+  </div>
+  <div class="sh"><div class="shk">Benefits &amp; Service</div><div class="sht">特典・サービス管理</div></div>
+
+  <!-- サービス枠 -->
+  <div class="sm">
+    <div class="smh">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        サービス枠 利用状況
+        <a class="box-link" href="https://mirarth-grp.box.com/s/c6yzdpgz3oiuz5au1fbaqcjtpek8mxth" target="_blank">サービス枠管理表を確認</a>
+      </div>
+    </div>
+    <!-- 確認物件：左詰め・大きめ表示 -->
+    <div class="sm-prop" id="smProp">確認物件：—</div>
+    <div style="margin-top:12px"></div>
+    <div class="mg">
+      <div>
+        <div class="mn">現在のサービス枠</div>
+        <div class="mi"><input type="number" class="mii" id="smTotal" placeholder="例：3710" oninput="recalcMeter()"><span class="mu">万円</span></div>
+      </div>
+      <div>
+        <div class="mn">使用サービス額</div>
+        <div class="mi"><input type="number" class="mii" id="smUsed" placeholder="0" oninput="recalcMeter()"><span class="mu">万円</span></div>
+      </div>
+      <div>
+        <div class="mn">残　額（自動）</div>
+        <div class="mi"><input type="number" class="mii ro" id="smRemain" readonly><span class="mu">万円</span></div>
+      </div>
+    </div>
+    <div class="mbar"><div class="mbf" id="mbFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- 申請内容 -->
+  <div class="fs-box">
+    <div class="fs-h">【申請内容】特典利用方法（複数選択可）</div>
+    <div class="fs-b g1">
+      <div class="ckg">
+        <label class="ck"><input type="checkbox" id="bDisc" onchange="toggleSec()"> 値引</label>
+        <label class="ck"><input type="checkbox" id="bMisc" onchange="toggleSec()"> 諸費用サービス（先充当）</label>
+        <label class="ck"><input type="checkbox" id="bOpt"  onchange="toggleSec()"> オプションサービス</label>
+        <label class="ck"><input type="checkbox" id="bOth"  onchange="toggleSec()"> その他サービス</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="fs-box hidden" id="secDisc">
+    <div class="fs-h">1. 値引</div>
+    <div class="fs-b g2">
+      <div class="fg">
+        <label class="fl">金額<span style="font-weight:400;color:var(--t3);margin-left:4px">万円　例：32.45</span></label>
+        <input type="number" class="fi" id="fDiscAmt" placeholder="0" oninput="recalcSaishuu()">
+      </div>
+      <div class="fg"><label class="fl">備考</label>
+        <input type="text" class="fi" id="fDiscNote" placeholder="提携特典による値引き"></div>
+    </div>
+  </div>
+
+  <div class="fs-box hidden" id="secMisc">
+    <div class="fs-h">2. 諸費用サービス（先充当）</div>
+    <div class="fs-b g2">
+      <div class="fg">
+        <label class="fl">金額<span style="font-weight:400;color:var(--t3);margin-left:4px">万円　例：32.45</span></label>
+        <input type="number" class="fi" id="fMiscAmt" placeholder="0"></div>
+      <div class="fg"><label class="fl">内容</label>
+        <input type="text" class="fi" id="fMiscNote" placeholder="仲介手数料・ローン手数料等"></div>
+    </div>
+  </div>
+
+  <div class="fs-box hidden" id="secOpt">
+    <div class="fs-h">3. オプションサービス</div>
+    <div class="fs-b g2">
+      <div class="fg">
+        <label class="fl">金額<span style="font-weight:400;color:var(--t3);margin-left:4px">万円　例：10</span></label>
+        <input type="number" class="fi" id="fOptAmt" placeholder="0"></div>
+      <div class="fg"><label class="fl">内容</label>
+        <input type="text" class="fi" id="fOptNote" placeholder="カーテン・照明等"></div>
+    </div>
+  </div>
+
+  <div class="fs-box hidden" id="secOth">
+    <div class="fs-h">4. その他サービス</div>
+    <div class="fs-b g2">
+      <div class="fg">
+        <label class="fl">金額<span style="font-weight:400;color:var(--t3);margin-left:4px">万円　例：5</span></label>
+        <input type="number" class="fi" id="fOthAmt" placeholder="0"></div>
+      <div class="fg"><label class="fl">内容</label>
+        <input type="text" class="fi" id="fOthNote" placeholder="内容を入力"></div>
+    </div>
+  </div>
+
+  <!-- 事業利益 -->
+  <div class="profit-box">
+    <div class="fs-h">
+      事業利益
+      <a class="box-link" href="https://mirarth-grp.box.com/s/njpptqbu23sc46sbk9ss5i8a624z7dnx" target="_blank">収支関係一式を確認</a>
+    </div>
+    <div class="fs-b g4">
+      <div class="fg">
+        <label class="fl">事業利益（全体）<span style="font-weight:400;color:var(--t3);margin-left:4px">円　例：25,722,000</span></label>
+        <input type="number" class="fi" id="fProfitAll" placeholder="25722000">
+      </div>
+      <div class="fg">
+        <label class="fl">事業利益率（全体）<span style="font-weight:400;color:var(--t3);margin-left:4px">%　例：2.01</span></label>
+        <input type="number" class="fi" id="fProfitAllRate" placeholder="2.01" step="0.01">
+      </div>
+      <div class="fg">
+        <label class="fl">事業利益（各号棟）<span style="font-weight:400;color:var(--t3);margin-left:4px">円　例：−183,000</span></label>
+        <input type="number" class="fi" id="fProfitUnit" placeholder="-183000">
+      </div>
+      <div class="fg">
+        <label class="fl">事業利益率（各号棟）<span style="font-weight:400;color:var(--t3);margin-left:4px">%　例：−0.31</span></label>
+        <input type="number" class="fi" id="fProfitUnitRate" placeholder="-0.31" step="0.01">
+      </div>
+    </div>
+    <div style="padding:0 18px 12px;font-size:10.5px;color:var(--t3)">収支関係一式（上記リンク）で確認した数値を入力してください。</div>
+  </div>
+
+  <div class="ab no-print">
+    <div class="abl"><button class="btn bs" id="bkFromSvc">← 契約情報に戻る</button></div>
+    <div class="abr"><button class="btn ba" onclick="goTo(5)">稟議書を作成する →</button></div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  STEP 5: 稟議書
+================================================================ -->
+<div id="scr5" class="hidden">
+  <div class="bc no-print">
+    <a onclick="goTo(1)">企業検索</a><i>›</i>
+    <a onclick="goTo(4)">特典・サービス</a><i>›</i>
+    <span>稟議書確認</span>
+  </div>
+  <div class="sh no-print"><div class="shk">Approval Document</div><div class="sht">法人制度利用報告書　確認・印刷</div></div>
+
+  <!-- 稟議管理番号 -->
+  <div class="rin-wrap no-print">
+    <div class="rin-lbl">稟議管理番号</div>
+    <input type="text" class="rin-in" id="fRingi" placeholder="例：2026-001" oninput="sv('aRingi', this.value||'—')">
+    <button class="btn bs bsm" onclick="sv('aRingi', document.getElementById('fRingi').value||'—')">利用報告書に反映</button>
+    <a class="box-link" href="https://mirarth-grp.box.com/s/9ybhwr5n3p8z4l9232v3fzm3jnz4t0rk" target="_blank">稟議申請（Box）を開く</a>
+    <div class="rin-note">契約後、上記リンクから稟議申請を行い、発行された番号を入力してください。</div>
+  </div>
+
+  <!-- 添付書類チェックリスト -->
+  <div class="fs-box no-print">
+    <div class="fs-h">添付書類チェックリスト（全6種）</div>
+    <div class="fs-b g1">
+      <div class="att-list">
+        <label class="att-item" id="att1">
+          <input type="checkbox" onchange="updAttCls(1)">
+          <span class="att-lbl">変更合意書<span class="att-req">必須</span></span>
+        </label>
+        <label class="att-item" id="att2">
+          <input type="checkbox" onchange="updAttCls(2)">
+          <span class="att-lbl">費用サービス確約書<span class="att-req">必須</span></span>
+        </label>
+        <label class="att-item" id="att3">
+          <input type="checkbox" onchange="updAttCls(3)">
+          <span class="att-lbl">オプションサービス確約書</span>
+        </label>
+        <label class="att-item" id="att4">
+          <input type="checkbox" onchange="updAttCls(4)">
+          <span class="att-lbl">サービス枠管理表<span class="att-req">必須</span></span>
+          <a class="box-link" href="https://mirarth-grp.box.com/s/c6yzdpgz3oiuz5au1fbaqcjtpek8mxth" target="_blank" onclick="event.stopPropagation()">Boxで開く</a>
+        </label>
+        <label class="att-item" id="att5">
+          <input type="checkbox" onchange="updAttCls(5)">
+          <span class="att-lbl">紹介カード<span class="att-req">必須</span></span>
+          <a class="box-link" href="https://mirarth-grp.box.com/s/jyt1o366iw1ttgefq3ifqddly8telfgu" target="_blank" onclick="event.stopPropagation()">Boxで開く</a>
+        </label>
+        <label class="att-item" id="att6">
+          <input type="checkbox" onchange="updAttCls(6)">
+          <span class="att-lbl">業務提携契約書<span class="att-req">必須</span></span>
+          <a class="box-link" href="https://mirarth-grp.box.com/s/d25p0d4262mhit9ekpooxxggx1yl03d3" target="_blank" onclick="event.stopPropagation()">Boxで開く</a>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="ab no-print">
+    <div class="abl"><button class="btn bs" onclick="goTo(4)">← 内容を修正する</button></div>
+    <div class="abr">
+      <button class="btn ba" onclick="goTo(6)">デスクネッツ用文章 →</button>
+      <button class="btn bp" onclick="window.print()">印刷 / PDF保存</button>
+    </div>
+  </div>
+
+  <!-- ▼ 稟議書本体（印刷対象） -->
+  <div class="ap-wrap">
+    <div class="ap">
+      <!-- 枠外上部：営業担当・起案日 -->
+      <div class="ap-top-out">
+        <span>起案部署：戸建営業部　　営業担当：<strong id="aCreator">—</strong></span>
+        <span>起案年月日：<span id="aDate">—</span></span>
+      </div>
+
+      <div class="ap-title">法人制度利用報告書</div>
+
+      <div class="ap-meta">
+        <div>申請番号：　　　　号　　稟議管理番号：<strong id="aRingi">—</strong></div>
+        <div>決裁年月日：　　　年　　月　　日</div>
+      </div>
+
+      <!-- 基本情報 -->
+      <div class="ash">基本情報</div>
+      <table class="at">
+        <tr>
+          <th>物件名・号棟</th><td id="aPropUnit">—</td>
+          <th>契約日</th><td id="aCDate">—</td>
+        </tr>
+        <tr>
+          <th>引渡予定</th><td id="aDeliv">—</td>
+          <th>勤務先</th><td id="aCoName">—</td>
+        </tr>
+        <tr>
+          <th>顧客名①</th><td id="aB1">—</td>
+          <th>顧客名②</th><td id="aB2">—</td>
+        </tr>
+        <tr>
+          <th>提携会社</th><td id="aDept" colspan="3">—</td>
+        </tr>
+      </table>
+
+      <!-- 法人提携 -->
+      <div class="ash">＜法人提携利用＞</div>
+      <table class="at">
+        <tr>
+          <th>販売価格（税込）</th><td id="aPrice" class="mn">—</td>
+          <th>建物消費税</th><td id="aTax">—</td>
+        </tr>
+        <tr>
+          <th>税抜価格</th><td id="aNet">—</td>
+          <th>割引後価格（税込）</th><td id="aDiscP">—</td>
+        </tr>
+        <tr>
+          <th>特典</th>
+          <td id="aRateD">—</td>
+          <th>法人提携特典額</th>
+          <td id="aBenefit" class="mn">—</td>
+        </tr>
+        <tr>
+          <th>手数料</th>
+          <td id="aFeeD">—</td>
+          <th>窓口支払手数料</th>
+          <td id="aFeeAmt" class="mn">—</td>
+        </tr>
+        <tr>
+          <td colspan="4" class="formula">
+            【計算式】特典額 ＝ 販売価格（円）× 特典率　／　手数料額 ＝ 税抜価格（円）× 手数料率 × 1.1（消費税込）
+          </td>
+        </tr>
+      </table>
+
+      <!-- 契約内容 + ローン -->
+      <div class="ash">契約内容（現金分）・ローン状況</div>
+      <div class="a2">
+        <div class="a2c">
+          <div class="a2h">現金分</div>
+          <table class="a2t">
+            <tr><th>手付 頭金</th><td id="apTA">—</td></tr>
+            <tr><th>手付 諸費用</th><td id="apTS">—</td></tr>
+            <tr><th>手付 合計</th><td id="apTT" class="mn">—</td></tr>
+            <tr><th>中間 頭金</th><td id="apCA">—</td></tr>
+            <tr><th>中間 諸費用</th><td id="apCS">—</td></tr>
+            <tr><th>中間 合計</th><td id="apCT" class="mn">—</td></tr>
+            <tr><th>最終残金</th><td id="apFinal" class="mn">—</td></tr>
+          </table>
+        </div>
+        <div class="a2c">
+          <div class="a2h">ローン状況</div>
+          <table class="a2t">
+            <tr><th>ローン①</th><td id="aL1">—</td></tr>
+            <tr><th>ローン②</th><td id="aL2">—</td></tr>
+            <tr><th>ローン③</th><td id="aL3">—</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 申請内容 -->
+      <div class="ash">【申請内容】値引・サービス</div>
+      <table class="at">
+        <tr>
+          <th style="width:80px">項目</th>
+          <th style="width:70px">金額</th>
+          <th>備考</th>
+        </tr>
+        <tr><td>1. 値引</td><td id="aDiscAmt">0 万円</td><td id="aDiscNote">—</td></tr>
+        <tr><td>2. 諸費用サービス</td><td id="aMiscAmt">0 万円</td><td id="aMiscNote">—</td></tr>
+        <tr><td>3. オプションサービス</td><td id="aOptAmt">0 万円</td><td id="aOptNote">—</td></tr>
+        <tr><td>4. その他サービス</td><td id="aOthAmt">0 万円</td><td id="aOthNote">—</td></tr>
+        <tr><th>合 計 額</th><td id="aSvcT" class="mn" colspan="2">—</td></tr>
+      </table>
+
+      <!-- サービス枠 + 事業利益（2カラム） -->
+      <div class="a2" style="margin-bottom:7px">
+        <div class="a2c">
+          <div class="a2h">サービス枠管理</div>
+          <table class="a2t">
+            <tr><th>サービス枠</th><td id="aSmT">—</td></tr>
+            <tr><th>使用サービス枠</th><td id="aSmU">—</td></tr>
+            <tr><th>サービス残高</th><td id="aSmR" class="mn">—</td></tr>
+          </table>
+        </div>
+        <div class="a2c">
+          <div class="a2h">事業利益</div>
+          <table class="a2t">
+            <tr><th>全体</th><td id="aProfA">—</td></tr>
+            <tr><th>全体 利益率</th><td id="aProfAR">—</td></tr>
+            <tr><th>各号棟</th><td id="aProfU">—</td></tr>
+            <tr><th>各号棟 利益率</th><td id="aProfUR">—</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 添付書類 -->
+      <div class="ash">【添付書類】</div>
+      <div class="ap-att" id="apAtt">
+        <div class="ap-att-item" id="apAtt1"><span class="chk-box"></span>変更合意書</div>
+        <div class="ap-att-item" id="apAtt2"><span class="chk-box"></span>費用サービス確約書</div>
+        <div class="ap-att-item" id="apAtt3"><span class="chk-box"></span>オプションサービス確約書</div>
+        <div class="ap-att-item" id="apAtt4"><span class="chk-box"></span>サービス枠管理表</div>
+        <div class="ap-att-item" id="apAtt5"><span class="chk-box"></span>紹介カード</div>
+        <div class="ap-att-item" id="apAtt6"><span class="chk-box"></span>業務提携契約書</div>
+      </div>
+
+      <div class="ap-foot">
+        <span>株式会社レーベンホームビルド ／ MIRARTHホールディングスグループ</span>
+        <span>内部資料</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+  STEP 6: デスクネッツ用文章
+================================================================ -->
+<div id="scr6" class="hidden">
+  <div class="bc no-print">
+    <a onclick="goTo(5)">稟議書</a><i>›</i><span>デスクネッツ用文章</span>
+  </div>
+  <div class="sh"><div class="shk">DeskNets Workflow</div><div class="sht">デスクネッツ（ワークフロー）用文章</div></div>
+
+  <p style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.8">
+    以下の内容をデスクネッツのワークフロー申請画面に貼り付けてください。<br>
+    「コピー」ボタンで各欄の内容をクリップボードに保存できます。
+  </p>
+
+  <div class="dw">
+    <div class="dwh"><div class="dwt">表題・件名</div><button class="btn bs bsm" onclick="cpFld('dkTtl')">コピー</button></div>
+    <div class="dw-body"><input type="text" class="dfi" id="dkTtl" readonly></div>
+  </div>
+  <div class="mt3"></div>
+  <div class="dw">
+    <div class="dwh"><div class="dwt">相手先</div><button class="btn bs bsm" onclick="cpFld('dkAite')">コピー</button></div>
+    <div class="dw-body"><input type="text" class="dfi" id="dkAite" readonly></div>
+  </div>
+  <div class="mt3"></div>
+  <div class="dw">
+    <div class="dwh"><div class="dwt">「目的・理由」本文</div><button class="btn bs bsm" onclick="cpFld('dkBody')">コピー</button></div>
+    <div class="dw-body"><textarea class="dta" id="dkBody" rows="22" readonly></textarea></div>
+  </div>
+  <div class="mt3"></div>
+  <div class="dw">
+    <div class="dwh"><div class="dwt">内訳（計算根拠）</div><button class="btn bs bsm" onclick="cpFld('dkBrk')">コピー</button></div>
+    <div class="dw-body"><textarea class="dta" id="dkBrk" rows="5" readonly></textarea></div>
+  </div>
+
+  <div class="ab no-print">
+    <div class="abl"><button class="btn bs" onclick="goTo(5)">← 稟議書に戻る</button></div>
+    <div class="abr"><button class="btn bp" onclick="goTo(1)">最初から入力する</button></div>
+  </div>
+</div>
+
+</div><!-- /lay -->
+
+<script>
+/* ===================================================
+   グローバル状態
+=================================================== */
+let COMPANIES = [];
+let co = null;
+let searchMode = 'name';  // 'name' | 'dept'
+
+/* ===================================================
+   起動
+=================================================== */
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('srchIn').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+  loadCompaniesCSV()
+    .then(txt => {
+      COMPANIES = parseCSV(txt);
+      setHdSt(COMPANIES.length.toLocaleString() + ' 社（最新データ）', 'ok');
+      done();
+    })
+    .catch(err => {
+      console.warn('fetch failed →', err, '— サンプルデータ使用');
+      COMPANIES = SAMPLES;
+      setHdSt('提携中の企業数 ' + COMPANIES.length + '（※紹介状発行のタイミングにご注意ください）', 'wn');
+      done();
+    });
+
+  function done() {
+    document.getElementById('ldOv').classList.add('hidden');
+    renderTbl('');
+    goTo(1);
+  }
+
+  document.getElementById('bkFromSvc').onclick = () => goTo(3);
+});
+
+async function loadCompaniesCSV() {
+  const candidates = [
+    new URL('./companies.csv', window.location.href).toString(),
+    new URL('/KigyouSearch/companies.csv', window.location.origin).toString(),
+  ];
+
+  let lastError = null;
+  for (const url of candidates) {
+    try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(String(response.status));
+      }
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      return decodeCsvBytes(bytes);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('CSV load failed');
+}
+
+function decodeCsvBytes(bytes) {
+  const utf8 = new TextDecoder('utf-8', { fatal: false }).decode(bytes).replace(/^\uFEFF/, '');
+  if (utf8.includes(',')) {
+    return utf8;
+  }
+  try {
+    const sjis = new TextDecoder('shift-jis', { fatal: false }).decode(bytes).replace(/^\uFEFF/, '');
+    if (sjis.includes(',')) {
+      return sjis;
+    }
+    return utf8;
+  } catch {
+    return utf8;
+  }
+}
+
+function setHdSt(msg, cls) {
+  const el = document.getElementById('hdSt');
+  el.textContent = msg; el.className = 'hst ' + cls;
+}
+
+/* ===================================================
+   CSV
+=================================================== */
+function parseCSV(txt) {
+  txt = txt.replace(/^\uFEFF/, '');
+  const lines = txt.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return [];
+  return lines.slice(1).map(l => {
+    const c = csvL(l);
+    if (!c[0]?.trim()) return null;
+    return { name:c[0]||'', dept:c[1]||'', confirm:c[2]||'', deadline:c[3]||'',
+             rate:+c[4]||0, fee:+c[5]||0, target:c[6]||'',
+             phone:c[7]||'', phone2:c[8]||'', contact:c[9]||'' };
+  }).filter(Boolean);
+}
+function csvL(line) {
+  const r=[]; let cur=''; let inQ=false;
+  for (let i=0;i<line.length;i++) {
+    const ch=line[i];
+    if (ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+    else if(ch===','&&!inQ){r.push(cur.trim());cur='';}
+    else cur+=ch;
+  }
+  r.push(cur.trim()); return r;
+}
+
+const SAMPLES = [
+  {name:'日本電気',dept:'NECビジネスインテリジェンス株式会社',confirm:'紹介カード受領',deadline:'購入申込',rate:.005,fee:.005,target:'関連会社従業員',phone:'03-3455-1136',phone2:'',contact:'加藤'},
+  {name:'ホンダ開発株式会社',dept:'ホンダ開発株式会社',confirm:'紹介カード受領',deadline:'購入申込',rate:.005,fee:.005,target:'関連会社従業員',phone:'048-452-5820',phone2:'',contact:'田中'},
+  {name:'三菱UFJ銀行',dept:'三菱UFJ銀行提携センター',confirm:'社員証確認',deadline:'引渡前',rate:.01,fee:.005,target:'行員',phone:'03-1234-5678',phone2:'',contact:'山本'},
+  {name:'東京海上日動火災保険株式会社',dept:'東京海上日動ファシリティーズ株式会社',confirm:'紹介カード受領',deadline:'購入申込',rate:.005,fee:.005,target:'関連会社従業員',phone:'044-543-2323',phone2:'',contact:'東篤'},
+  {name:'ライジングサポート株式会社',dept:'ライジングサポート株式会社',confirm:'紹介状確認',deadline:'契約時',rate:.005,fee:.005,target:'会員',phone:'03-9999-0000',phone2:'',contact:'担当者'},
+  {name:'三井住友銀行',dept:'SMBCグループ提携',confirm:'社員証確認',deadline:'引渡前',rate:.01,fee:.005,target:'行員・グループ従業員',phone:'03-2222-3333',phone2:'',contact:'佐藤'},
+];
+
+/* ===================================================
+   画面切替
+=================================================== */
+const SCRIDS = ['scr1','scr2','scr3','scr4','scr5','scr6'];
+function goTo(step) {
+  SCRIDS.forEach((id,i) => document.getElementById(id).classList.toggle('hidden', i!==step-1));
+  for (let i=1;i<=6;i++) {
+    document.getElementById('si'+i).className = 'si'+(i<step?' done':i===step?' active':'');
+  }
+  if (step===5) buildApproval();
+  if (step===6) buildDnetz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ===================================================
+   検索モード
+=================================================== */
+function setMode(mode) {
+  searchMode = mode;
+  document.getElementById('tab1').className = 'mtab' + (mode==='name'?' on':'');
+  document.getElementById('tab2').className = 'mtab' + (mode==='dept'?' on':'');
+  document.getElementById('srchIn').placeholder =
+    mode==='name' ? '例：NEC、ホンダ、三菱、東京海上…' : '例：NECビジネスインテリジェンス、ライジングサポート…';
+  const note = document.getElementById('qcRateNote');
+  note.style.color = '';
+  renderTbl(document.getElementById('srchIn').value.trim());
+}
+
+/* ===================================================
+   検索・テーブル
+=================================================== */
+function doSearch() { renderTbl(document.getElementById('srchIn').value.trim()); }
+function clrSearch() { document.getElementById('srchIn').value=''; renderTbl(''); }
+
+function normSearchText(v) {
+  return String(v || '')
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[‐‑‒–—―ーｰ－]/g, '-')
+    .replace(/[＆]/g, '&')
+    .replace(/[・･]/g, '')
+    .replace(/[()（）［］【】「」『』]/g, '')
+    .replace(/\s+/g, '');
+}
+
+function getSearchTarget(c) {
+  return searchMode === 'name' ? c.name : c.dept;
+}
+
+function getFilteredCompanies(q) {
+  const nq = normSearchText(q);
+  if (!nq) return COMPANIES;
+  return COMPANIES.filter(c => normSearchText(getSearchTarget(c)).includes(nq));
+}
+
+function renderTbl(q) {
+  const res = getFilteredCompanies(q);
+  document.getElementById('rCnt').textContent = res.length.toLocaleString();
+
+  const noRes=document.getElementById('noRes');
+  const tbl=document.getElementById('coTbl');
+  if (!res.length) {
+    document.getElementById('coBody').innerHTML='';
+    tbl.classList.add('hidden'); noRes.classList.remove('hidden'); return;
+  }
+  tbl.classList.remove('hidden'); noRes.classList.add('hidden');
+
+  const MAX=500;
+  document.getElementById('coBody').innerHTML =
+    res.slice(0,MAX).map((c,i)=>`
+      <tr onclick="previewCo(${i},'${esc(q)}')" style="cursor:pointer">
+        <td><div class="tn">${esc(c.name)}</div></td>
+        <td class="td2">${esc(c.dept)}</td>
+        <td class="td2">${esc(c.contact)}</td>
+        <td class="td2">${esc(c.phone)}</td>
+        <td class="tac">${pct(c.rate)}</td>
+        <td class="tac">${pct(c.fee)}</td>
+        <td class="td2" style="font-size:10.5px">${esc(c.confirm)}</td>
+        <td><button class="btn bp bxs"
+          onclick="selByIdx(${i},'${esc(q)}');event.stopPropagation()">選択</button></td>
+      </tr>`).join('') +
+    (res.length>MAX ? `<tr><td colspan="8" style="text-align:center;padding:9px;font-size:11px;color:var(--t3)">
+      ＊${res.length.toLocaleString()}件中${MAX}件表示。絞り込んでください。</td></tr>` : '');
+}
+
+/* ===================================================
+   特典額クイック計算（STEP1）
+=================================================== */
+function recalcQC() {
+  const pm  = +document.getElementById('qcPrice').value || 0;
+  const tm  = +document.getElementById('qcTax').value   || 0;
+  const rate = co ? co.rate : 0.005;
+  const feeR = co ? co.fee  : 0.005;
+  const rEl  = document.getElementById('qcResult');
+  const fEl  = document.getElementById('qcFeeResult');
+  const nEl  = document.getElementById('qcRateNote');
+
+  nEl.textContent = co
+    ? `${esc(co.name)}：特典率 ${pct(rate)}／手数料率 ${pct(feeR)} で計算中`
+    : '特典率 0.5%（標準・企業未選択）で計算中';
+
+  if (pm > 0) {
+    const b = Math.floor(pm * 10000 * rate);
+    rEl.textContent = fmtE(b) + ' 円';
+    rEl.className = 'qc-res';
+  } else {
+    rEl.textContent = '価格を入力してください'; rEl.className = 'qc-res p';
+  }
+  if (pm > 0 && tm > 0) {
+    const net = (pm - tm) * 10000;
+    const f   = Math.floor(net * feeR * 1.1);
+    fEl.textContent = fmtE(f) + ' 円';
+    fEl.className = 'qc-res';
+  } else {
+    fEl.textContent = tm > 0 ? '価格も入力してください' : '消費税も入力してください';
+    fEl.className = 'qc-res p';
+  }
+}
+
+/* ===================================================
+   企業選択
+=================================================== */
+/* プレビュー：行クリックで料率反映、QC更新のみ（ページ遷移なし） */
+function previewCo(idx, q) {
+  const res = getFilteredCompanies(q);
+  const c = res[idx]; if (!c) return;
+  co = c;  // グローバルに保持（選択後の計算に使用）
+  recalcQC();
+  // QCのレート注記を目立たせる
+  const note = document.getElementById('qcRateNote');
+  note.textContent = `✔ ${c.name}：特典率 ${pct(c.rate)} / 手数料率 ${pct(c.fee)} で計算中（「選択」で次へ）`;
+  note.style.color = 'var(--ac)';
+}
+
+function selByIdx(idx, q) {
+  const res = getFilteredCompanies(q);
+  if (res[idx]) selCo(res[idx]);
+}
+function selCo(c) {
+  co = c;
+  // パネル更新
+  sv('dpName',    c.name);    sv('dpDept',    c.dept);
+  sv('dpContact', c.contact); sv('dpPhone',   c.phone+(c.phone2?' / '+c.phone2:''));
+  sv('dpConf',    c.confirm); sv('dpRate',    pct(c.rate));
+  sv('dpFee',     pct(c.fee)); sv('dpTgt',    c.target);
+  sv('dpDl',      c.deadline);
+  document.getElementById('bc2').textContent = c.name;
+  recalcQC();
+  goTo(2);
+}
+
+/* ===================================================
+   STEP2 → STEP3
+=================================================== */
+function proceedStep2() {
+  if (!gv('fProp').trim()) { alert('物件名を入力してください。'); return; }
+  if (!gv('fSales').trim()) { alert('営業担当を入力してください。'); return; }
+  goTo(3);
+}
+
+/* ===================================================
+   STEP3 → STEP4
+=================================================== */
+function proceedStep3() {
+  if (!gv('fB1').trim()) { alert('顧客名①を入力してください。'); return; }
+  if (!gv('fCD'))        { alert('契約日を入力してください。'); return; }
+  if (!gn('fPrice'))     { alert('販売価格を入力してください。'); return; }
+  // サービス枠の確認物件を更新
+  const p = gv('fProp'), u = gv('fUnit');
+  const lbl = 'レーベンプラッツ' + p + (u ? ' ' + u + '号棟' : '');
+  const el = document.getElementById('smProp');
+  el.innerHTML = '確認物件：<span>' + esc(lbl) + '</span>';
+  document.getElementById('bkFromSvc').onclick = () => goTo(3);
+  goTo(4);
+}
+
+/* ===================================================
+   全再計算（価格入力時）
+=================================================== */
+function recalcAll() {
+  recalcBanner();
+  recalcSaishuu();
+}
+
+function recalcBanner() {
+  if (!co) return;
+  const pm = gn('fPrice'), tm = gn('fTax');
+  const pe = pm * 10000, ne = (pm - tm) * 10000;
+  const bEl = document.getElementById('cbB'), fEl = document.getElementById('cbF');
+  if (pm > 0) {
+    const b = Math.floor(pe * co.rate);
+    bEl.textContent = fmtE(b) + ' 円'; bEl.className = 'cbv';
+  } else { bEl.textContent = '価格を入力してください'; bEl.className = 'cbv p'; }
+  if (pm > 0 && tm > 0) {
+    const f = Math.floor(ne * co.fee * 1.1);
+    fEl.textContent = fmtE(f) + ' 円'; fEl.className = 'cbv';
+  } else { fEl.textContent = '価格・消費税を入力してください'; fEl.className = 'cbv p'; }
+}
+
+/* ===================================================
+   手付・中間 合計
+=================================================== */
+function recalcPay() {
+  document.getElementById('pTT').value = (gn('pTA') + gn('pTS')) || '';
+  document.getElementById('pCT').value = (gn('pCA') + gn('pCS')) || '';
+  recalcSaishuu();
+}
+
+/* ===================================================
+   最終残金
+=================================================== */
+function recalcSaishuu() {
+  const price  = gn('fPrice');
+  const disc   = document.getElementById('bDisc')?.checked ? gn('fDiscAmt') : 0;
+  const base   = price - disc;
+  const tt = gn('pTT') || gn('pTA') + gn('pTS');
+  const ct = gn('pCT') || gn('pCA') + gn('pCS');
+  const loan   = gn('l1a') + gn('l2a') + gn('l3a');
+  const fin    = base - tt - ct - loan;
+  const el     = document.getElementById('saishuuDisp');
+  if (!price) { el.textContent = '— 万円'; el.className = 'sr-val'; return; }
+  el.textContent = fmtM(fin) + ' 万円';
+  el.className   = 'sr-val' + (fin < 0 ? ' neg' : '');
+}
+
+/* ===================================================
+   特典チェック → セクション表示
+=================================================== */
+function toggleSec() {
+  [['Disc','secDisc'],['Misc','secMisc'],['Opt','secOpt'],['Oth','secOth']].forEach(([k,s])=>{
+    document.getElementById(s).classList.toggle('hidden',!document.getElementById('b'+k).checked);
+  });
+  recalcSaishuu();
+}
+
+/* ===================================================
+   サービスメーター
+=================================================== */
+function recalcMeter() {
+  const t = gn('smTotal'), u = gn('smUsed');
+  document.getElementById('smRemain').value = t - u || '';
+  const p = t > 0 ? Math.min(100, u/t*100) : 0;
+  const f = document.getElementById('mbFill');
+  f.style.width = p + '%';
+  f.className = 'mbf' + (p>=100?' ov':p>=80?' wn':'');
+}
+
+/* ===================================================
+   添付書類チェック
+=================================================== */
+function updAttCls(n) {
+  const el  = document.getElementById('att' + n);
+  const chk = el.querySelector('input');
+  el.classList.toggle('done', chk.checked);
+  // PDF内の添付書類表示も更新
+  const apEl = document.getElementById('apAtt' + n);
+  if (apEl) apEl.classList.toggle('checked', chk.checked);
+}
+
+/* ===================================================
+   稟議書 生成
+=================================================== */
+function buildApproval() {
+  const c = co || {};
+  const now = new Date();
+  const today = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
+
+  const prop = gv('fProp'), unit = gv('fUnit');
+  const propLbl = 'レーベンプラッツ' + prop + (unit ? ' ' + unit + '号棟' : '');
+
+  const pm = gn('fPrice'), tm = gn('fTax');
+  const pe = pm * 10000, te = tm * 10000, ne = pe - te;
+  const discM = document.getElementById('bDisc')?.checked ? gn('fDiscAmt') : 0;
+  const discE = discM * 10000;
+  const discPE = pe - discE;
+
+  const benefit = pe && c.rate ? Math.floor(pe * c.rate)     : 0;
+  const feeAmt  = ne && c.fee  ? Math.floor(ne * c.fee * 1.1): 0;
+
+  const ta=gn('pTA'),ts=gn('pTS'),tt=ta+ts;
+  const ca=gn('pCA'),cs=gn('pCS'),ct=ca+cs;
+  const l1=gn('l1a'),l2=gn('l2a'),l3=gn('l3a');
+  const loanT=l1+l2+l3;
+  const fin=(pm-discM)-tt-ct-loanT;
+
+  const discSvc = document.getElementById('bDisc')?.checked ? gn('fDiscAmt') : 0;
+  const miscSvc = document.getElementById('bMisc')?.checked ? gn('fMiscAmt') : 0;
+  const optSvc  = document.getElementById('bOpt')?.checked  ? gn('fOptAmt')  : 0;
+  const othSvc  = document.getElementById('bOth')?.checked  ? gn('fOthAmt')  : 0;
+  const svcT = discSvc + miscSvc + optSvc + othSvc;
+
+  const smT=gn('smTotal'), smU=gn('smUsed'), smR=smT-smU;
+
+  const dm=gv('fDM'), dt=gv('fDT');
+  let delivStr='—';
+  if(dm){const[y,m]=dm.split('-');delivStr=y+'年'+parseInt(m)+'月'+(dt||'');}
+
+  const lStr=(bi,ai,ui)=>{
+    const b=gv(bi),a=gn(ai),u=document.getElementById(ui)?.checked;
+    if(!b&&!a&&!u)return'—';
+    return(b||'')+(a?' '+fmtM(a)+'万円':'')+(u?' （未内定）':'');
+  };
+
+  sv('aDate',    today);
+  sv('aCreator', gv('fSales')||'—');
+  sv('aRingi',   gv('fRingi')||'—');
+  sv('aPropUnit',propLbl||'—');
+  sv('aCDate',   gv('fCD') ? fmtDt(gv('fCD')) : '—（未定）');
+  sv('aDeliv',   delivStr);
+  sv('aCoName',  c.name||'—');
+  sv('aB1',      gv('fB1') ? gv('fB1')+' 様' : '—');
+  sv('aB2',      gv('fB2') ? gv('fB2')+' 様' : '—');
+  sv('aDept',    c.dept||'—');
+  sv('aPrice',   pm ? fmtE(pe)+'円' : '—');
+  sv('aTax',     tm ? fmtE(te)+'円' : '—');
+  sv('aNet',     ne ? fmtE(ne)+'円' : '—');
+  sv('aDiscP',   pe ? (discM ? fmtE(discPE)+'円（値引 '+fmtM(discM)+'万円）' : fmtE(pe)+'円（値引なし）') : '—');
+  sv('aRateD',   c.rate ? pct(c.rate) : '—');
+  sv('aBenefit', benefit ? fmtE(benefit)+'円' : '—');
+  sv('aFeeD',    c.fee  ? pct(c.fee)  : '—');
+  sv('aFeeAmt',  feeAmt  ? fmtE(feeAmt)+'円' : '—');
+
+  sv('apTA', ta ? fmtM(ta)+'万円' : '—');
+  sv('apTS', ts ? fmtM(ts)+'万円' : '—');
+  sv('apTT', tt ? fmtM(tt)+'万円' : '—');
+  sv('apCA', ca ? fmtM(ca)+'万円' : '—');
+  sv('apCS', cs ? fmtM(cs)+'万円' : '—');
+  sv('apCT', ct ? fmtM(ct)+'万円' : '—');
+  sv('apFinal', pm ? fmtM(fin)+'万円' : '—');
+  sv('aL1', lStr('l1b','l1a','l1u'));
+  sv('aL2', lStr('l2b','l2a','l2u'));
+  sv('aL3', lStr('l3b','l3a','l3u'));
+
+  sv('aDiscAmt',  fmtM(discSvc)+'万円'); sv('aDiscNote', gv('fDiscNote')||'—');
+  sv('aMiscAmt',  fmtM(miscSvc)+'万円'); sv('aMiscNote', gv('fMiscNote')||'—');
+  sv('aOptAmt',   fmtM(optSvc) +'万円'); sv('aOptNote',  gv('fOptNote') ||'—');
+  sv('aOthAmt',   fmtM(othSvc) +'万円'); sv('aOthNote',  gv('fOthNote') ||'—');
+  sv('aSvcT',     fmtM(svcT)+'万円');
+
+  sv('aSmT', smT ? fmtM(smT)+'万円' : '—');
+  sv('aSmU', smU ? fmtM(smU)+'万円' : '—');
+  sv('aSmR', smT ? fmtM(smR)+'万円' : '—');
+
+  const pa=gn('fProfitAll'),par=gn('fProfitAllRate'),pu=gn('fProfitUnit'),pur=gn('fProfitUnitRate');
+  sv('aProfA',  pa  ? fmtE(pa) +'円' : '—');
+  sv('aProfAR', par ? par+'%'  : '—');
+  sv('aProfU',  pu  ? fmtE(pu) +'円' : '—');
+  sv('aProfUR', pur ? pur+'%'  : '—');
+
+  // 添付書類のチェック状態を反映
+  for (let i=1;i<=6;i++) {
+    const chk = document.querySelector('#att'+i+' input');
+    const apEl = document.getElementById('apAtt'+i);
+    if (apEl && chk) apEl.classList.toggle('checked', chk.checked);
+  }
+}
+
+/* ===================================================
+   デスクネッツ用文章 生成
+=================================================== */
+function buildDnetz() {
+  const c = co || {};
+  const prop=gv('fProp'),unit=gv('fUnit');
+  const propLbl='レーベンプラッツ'+prop+(unit?' '+unit+'号棟':'');
+
+  const pm=gn('fPrice'),tm=gn('fTax');
+  const pe=pm*10000,te=tm*10000,ne=pe-te;
+  const benefit=pe&&c.rate?Math.floor(pe*c.rate):0;
+  const feeAmt=ne&&c.fee?Math.floor(ne*c.fee*1.1):0;
+  const smT=gn('smTotal'),smU=gn('smUsed'),smR=smT-smU;
+  const cdate=gv('fCD')?fmtDt(gv('fCD')):'（未定）';
+  const dm=gv('fDM'),dt=gv('fDT');
+  let delivStr='（未定）';
+  if(dm){const[y,m]=dm.split('-');delivStr=y+'年'+parseInt(m)+'月'+(dt||'');}
+
+  const title = `（${propLbl}）法人提携制度利用に伴う紹介手数料支払・特典適用およびサービス利用の件`;
+  const aite  = c.dept || '—';
+  const body  =
+`${propLbl}について、提携企業の従業員または会員様より法人提携制度を通じた購入申込を受け、${cdate}に売買契約を締結予定です。
+
+本件は、当社と提携企業${c.dept||'　'}との間で締結している法人提携契約に基づき、同社従業員または会員に対し法人提携特典を付与するとともに、提携企業へ紹介手数料を支払うものです。
+
+法人提携制度の活用により、提携企業グループ従業員の住宅ニーズを継続的に獲得するとともに、当社戸建分譲の認知向上・販売機会の拡大が見込まれます。つきましては、下記詳細をご確認くださいますようお願いいたします。
+
+【契約概要】
+・物件名：${propLbl}
+・契約日：${cdate}
+・引渡予定：${delivStr}
+・提携企業：${c.dept||'—'}
+・販売価格：${pe?fmtE(pe)+'円（うち建物消費税：'+fmtE(te)+'円）':'—'}
+・使用サービス枠：${smT?fmtE(smU*10000)+'円（残：'+fmtE(smR*10000)+'円）':'—'}
+・法人提携特典額：${benefit?fmtE(benefit)+'円':'—'}
+・窓口支払い手数料：${feeAmt?fmtE(feeAmt)+'円':'—'}
+
+以上となります。
+上記内容にて法人提携制度を適用したうえでのご契約としたく、本稟議を起案いたしました。
+何卒ご承認のほどよろしくお願い申し上げます。`;
+
+  const brk =
+`・法人提携特典額：${benefit?fmtE(benefit)+'円':'—'}
+  （物件価格（税込）¥${pe?fmtE(pe):'—'} × ${pct(c.rate||0)} ＝ ¥${benefit?fmtE(benefit):'—'}）
+・窓口支払い手数料：${feeAmt?fmtE(feeAmt)+'円':'—'}
+  （税引き後物件価格 ¥${ne?fmtE(ne):'—'} × ${pct(c.fee||0)} × 消費税10% ＝ ¥${feeAmt?fmtE(feeAmt):'—'}）`;
+
+  document.getElementById('dkTtl').value  = title;
+  document.getElementById('dkAite').value = aite;
+  document.getElementById('dkBody').value = body;
+  document.getElementById('dkBrk').value  = brk;
+}
+
+/* ===================================================
+   クリップボード
+=================================================== */
+function cpFld(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value).then(()=>{
+    const btn = el.closest('.dw').querySelector('button');
+    const orig = btn.textContent;
+    btn.textContent = '✓ コピー済み';
+    setTimeout(()=>btn.textContent=orig, 2000);
+  }).catch(()=>{ el.select(); document.execCommand('copy'); });
+}
+
+/* ===================================================
+   ユーティリティ
+=================================================== */
+const gv   = id => (document.getElementById(id)?.value||'').trim();
+const gn   = id => parseFloat(document.getElementById(id)?.value)||0;
+const sv   = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+const pct  = r => ((r||0)*100).toFixed(1)+'%';
+const fmtE = n => Math.floor(n||0).toLocaleString();
+const fmtM = n => { const v=parseFloat(n)||0; return v%1===0 ? v.toLocaleString() : v.toLocaleString(undefined,{maximumFractionDigits:2}); };
+const fmtDt= iso => { if(!iso)return'—'; const[y,m,d]=iso.split('-'); return y+'年'+parseInt(m)+'月'+parseInt(d)+'日'; };
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+</script>
+</body>
+</html>
