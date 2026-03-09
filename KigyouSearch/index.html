@@ -75,6 +75,9 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
 .sw:focus-within{border-bottom-color:var(--ac)}
 .sin{flex:1;border:none;background:transparent;font-family:var(--fs);font-size:15px;color:var(--t1);padding:5px 0;outline:none}
 .sin::placeholder{color:var(--t3);font-size:13px}
+.selc{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;border:1px solid var(--acl);background:rgba(139,115,85,.06)}
+.selc-l{font-size:10px;letter-spacing:.08em;color:var(--t2);white-space:nowrap}
+.selc-v{font-size:12px;font-weight:500;color:var(--ac);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* 特典額クイック計算 */
 .qc{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -405,6 +408,11 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
     <div class="mode-tabs">
       <div class="mtab on" id="tab1" onclick="setMode('name')">勤め先会社名で検索</div>
       <div class="mtab" id="tab2" onclick="setMode('dept')">提携窓口会社名で検索</div>
+    </div>
+    <div class="selc hidden" id="selCoBox">
+      <div class="selc-l">Selected Company</div>
+      <div class="selc-v" id="selCoName">-</div>
+      <button class="btn bs bxs" type="button" onclick="clearSelectedCompany()">Clear</button>
     </div>
     <div class="sr">
       <div class="sw">
@@ -1065,6 +1073,7 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
 =================================================== */
 let COMPANIES = [];
 let co = null;
+let selectedCo = null;
 let searchMode = 'name';  // 'name' | 'dept'
 
 /* ===================================================
@@ -1089,6 +1098,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function done() {
     document.getElementById('ldOv').classList.add('hidden');
+    updateSelectedCompanyBox();
     renderTbl('');
     goTo(1);
   }
@@ -1208,6 +1218,29 @@ function setMode(mode) {
 function doSearch() { renderTbl(document.getElementById('srchIn').value.trim()); }
 function clrSearch() { document.getElementById('srchIn').value=''; renderTbl(''); }
 
+function updateSelectedCompanyBox() {
+  const box = document.getElementById('selCoBox');
+  const name = document.getElementById('selCoName');
+  if (!box || !name) return;
+  if (!selectedCo) {
+    name.textContent = '-';
+    box.classList.add('hidden');
+    return;
+  }
+  name.textContent = selectedCo.dept
+    ? `${selectedCo.name} / ${selectedCo.dept}`
+    : selectedCo.name;
+  box.classList.remove('hidden');
+}
+
+function clearSelectedCompany() {
+  selectedCo = null;
+  co = null;
+  updateSelectedCompanyBox();
+  recalcQC();
+  renderTbl(document.getElementById('srchIn').value.trim());
+}
+
 function normSearchText(v) {
   return String(v || '')
     .normalize('NFKC')
@@ -1314,6 +1347,8 @@ function selByIdx(idx, q) {
 }
 function selCo(c) {
   co = c;
+  selectedCo = c;
+  updateSelectedCompanyBox();
   // パネル更新
   sv('dpName',    c.name);    sv('dpDept',    c.dept);
   sv('dpContact', c.contact); sv('dpPhone',   c.phone+(c.phone2?' / '+c.phone2:''));
