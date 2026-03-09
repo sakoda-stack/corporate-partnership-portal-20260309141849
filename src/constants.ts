@@ -38,6 +38,9 @@ export const LOGOS = [
   { id: 9, name: 'ホンダ開発', url: withBase('rogo/HONDA.png') },
   { id: 10, name: 'パナソニック共済会', url: withBase('rogo/Panasonic.png') },
   { id: 11, name: '東京海上日動ファシリティーズ', url: withBase('rogo/東京海上日動.png') },
+  { id: 12, name: 'NTTExcパートナーズ', url: withBase('rogo/NTT.png') },
+  { id: 13, name: 'アクセンチュア', url: withBase('rogo/accenture.jpg') },
+
 ];
 
 export type Topic = {
