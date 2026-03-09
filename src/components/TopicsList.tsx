@@ -86,7 +86,7 @@ export const TopicsList: React.FC = () => {
   }, []);
 
   return (
-    <section className="py-4 px-6 md:px-20 max-w-6xl">
+    <section className="py-4 px-6 md:px-20 max-w-6xl mx-auto">
       <div className="flex items-end justify-between mb-3">
         <div>
           <h2 className="font-serif text-xl mb-0.5 notranslate" translate="no">Topics</h2>

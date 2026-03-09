@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'lucide-react';
 
 export const ActionCards: React.FC = () => {
   return (
-    <section className="py-12 md:py-16 px-6 md:px-20 max-w-7xl">
+    <section className="py-12 md:py-16 px-6 md:px-20 max-w-7xl mx-auto">
       <div className="mb-10">
         <h2 className="font-serif text-2xl md:text-3xl mb-2 notranslate" translate="no">Quick Access</h2>
         <p className="text-stone-400 text-xs md:text-sm tracking-widest uppercase notranslate" translate="no">Service Navigation</p>
