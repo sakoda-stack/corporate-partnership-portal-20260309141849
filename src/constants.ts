@@ -1,10 +1,12 @@
 import { Building2, Search, FileText, Globe, Info, Mail, Home, CreditCard, FileCheck } from 'lucide-react';
 
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
 const NAV_LINKS = {
   home: '#',
   overview: 'https://sites.google.com/leben-hb.co.jp/teikei/%E3%83%9B%E3%83%BC%E3%83%A0#h.3f4tphhd9pn8',
   corporate: 'https://www.leben-establish.jp/teikei/',
-  search: '/KigyouSearch/index.html',
+  search: withBase('KigyouSearch/index.html'),
   card: 'https://mirarth-grp.box.com/s/jyt1o366iw1ttgefq3ifqddly8telfgu',
   form: 'https://docs.google.com/spreadsheets/d/19kNuG7M-KBLphEOOrto42tm2CmRPCQDQyWbvfNZnDcc/edit?gid=0#gid=0',
   topics: '#',
@@ -25,17 +27,17 @@ export const MENU_ITEMS = [
 ];
 
 export const LOGOS = [
-  { id: 1, name: 'コーサイ・サービス', url: '/rogo/防衛省.svg' },
-  { id: 2, name: '東急ライフィア', url: '/rogo/東急.png' },
-  { id: 3, name: 'ベルス', url: '/rogo/BELS.jpg' },
-  { id: 4, name: 'リロクラブ', url: '/rogo/リロクラブ.jpg' },
-  { id: 5, name: 'ライジングサポート', url: '/rogo/SMBC.png' },
-  { id: 6, name: 'KDDI共済会', url: '/rogo/KDDI.png' },
-  { id: 7, name: '日立リアルエステートパートナーズ', url: '/rogo/HITACHI.jpg' },
-  { id: 8, name: 'NECインテリジェンス', url: '/rogo/NEC.png' },
-  { id: 9, name: 'ホンダ開発', url: '/rogo/HONDA.png' },
-  { id: 10, name: 'パナソニック共済会', url: '/rogo/Panasonic.png' },
-  { id: 11, name: '東京海上日動ファシリティーズ', url: '/rogo/東京海上日動.png' },
+  { id: 1, name: 'コーサイ・サービス', url: withBase('rogo/防衛省.svg') },
+  { id: 2, name: '東急ライフィア', url: withBase('rogo/東急.png') },
+  { id: 3, name: 'ベルス', url: withBase('rogo/BELS.jpg') },
+  { id: 4, name: 'リロクラブ', url: withBase('rogo/リロクラブ.jpg') },
+  { id: 5, name: 'ライジングサポート', url: withBase('rogo/SMBC.png') },
+  { id: 6, name: 'KDDI共済会', url: withBase('rogo/KDDI.png') },
+  { id: 7, name: '日立リアルエステートパートナーズ', url: withBase('rogo/HITACHI.jpg') },
+  { id: 8, name: 'NECインテリジェンス', url: withBase('rogo/NEC.png') },
+  { id: 9, name: 'ホンダ開発', url: withBase('rogo/HONDA.png') },
+  { id: 10, name: 'パナソニック共済会', url: withBase('rogo/Panasonic.png') },
+  { id: 11, name: '東京海上日動ファシリティーズ', url: withBase('rogo/東京海上日動.png') },
 ];
 
 export type Topic = {
