@@ -4,7 +4,7 @@ const withBase = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 const NAV_LINKS = {
   home: '#',
-  overview: 'https://sites.google.com/leben-hb.co.jp/teikei/%E3%83%9B%E3%83%BC%E3%83%A0#h.3f4tphhd9pn8',
+  overview: 'https://gamma.app/docs/-70wtfkb6cuvr0vz',
   corporate: 'https://www.leben-establish.jp/teikei/',
   search: withBase('KigyouSearch/index.html'),
   card: 'https://mirarth-grp.box.com/s/jyt1o366iw1ttgefq3ifqddly8telfgu',
