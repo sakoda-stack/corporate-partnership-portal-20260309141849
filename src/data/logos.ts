@@ -32,6 +32,7 @@ const LOGO_ITEMS: LogoItem[] = [
   { id: 11, name: '東京海上日動', file: '東京海上日動.png' },
   { id: 12, name: 'NTT', file: 'NTT.png' },
   { id: 13, name: 'Accenture', file: 'accenture.jpg' },
+  { id: 14, name: 'Bcan', file: 'Bcan.png' },
 ];
 
 export const LOGOS = LOGO_ITEMS.map((logo) => {
