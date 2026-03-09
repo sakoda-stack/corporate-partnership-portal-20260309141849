@@ -52,7 +52,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeId, onNavigate, isOpen, 
                 href: item.path,
                 target: shouldOpenNewTab ? '_blank' : undefined,
                 rel: shouldOpenNewTab ? 'noopener noreferrer' : undefined,
-                onClick: () => onNavigate(item.id),
               }
             : { onClick: () => onNavigate(item.id) };
 
