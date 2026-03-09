@@ -276,6 +276,79 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
 .mt3{margin-top:11px}.mt4{margin-top:15px}
 .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
+/* RESPONSIVE */
+@media (max-width: 900px){
+  .hd{padding:0 16px}
+  .sb{padding:0 16px;overflow-x:auto;overflow-y:hidden}
+  .lay{padding:18px 16px 40px}
+  .dpb{grid-template-columns:repeat(2,1fr)}
+  .g3,.g4{grid-template-columns:1fr 1fr}
+  .s3,.s4{grid-column:span 2}
+  .pg{grid-template-columns:1fr}
+  .pc{border-right:none;border-bottom:1px solid var(--bm)}
+  .pc:last-child{border-bottom:none}
+  .lg,.mg{grid-template-columns:1fr 1fr}
+  .ap-wrap{overflow-x:auto}
+  .ap{min-width:740px}
+}
+
+@media (max-width: 640px){
+  html{font-size:13px}
+  .hd{height:auto;min-height:54px;padding:10px 12px}
+  .hl{font-size:11px;letter-spacing:.12em}
+  .hs{font-size:9px;letter-spacing:.12em}
+  .hd-r{gap:8px}
+  .hd-back{height:22px;padding:0 8px}
+  .hst{font-size:9px}
+
+  .sb{height:auto;padding:8px 12px;gap:8px;flex-wrap:nowrap}
+  .si{font-size:10px}
+  .sn{width:18px;height:18px;font-size:9px}
+  .ss{width:14px;margin:0 2px}
+
+  .sh{margin-bottom:14px}
+  .sht{font-size:17px}
+  .bc{font-size:10px;padding-bottom:10px}
+
+  .sr{flex-direction:column;align-items:stretch}
+  .sw{width:100%}
+  .sr .btn{width:100%}
+  .qc{padding:10px 12px;gap:10px}
+  .qc-ttl{width:100%}
+  .qc-grp{width:100%;justify-content:space-between}
+  .qc-in{width:100%;max-width:170px}
+  .qc-sep{display:none}
+  .qc-note{margin-left:0}
+
+  .rm{padding:6px 0}
+  .rc{font-size:11px}
+  .ct th,.ct td{padding:7px 8px}
+
+  .dph,.fs-h,.dwh{padding:8px 12px}
+  .dpb,.fs-b,.dw-body,.sm{padding:10px 12px}
+  .dpb{grid-template-columns:1fr}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .s2,.s3,.s4{grid-column:span 1}
+
+  .cbanner{padding:10px 12px;gap:10px}
+  .cbi{width:100%}
+  .cb-sep{display:none}
+  .cbsub{margin-left:0;width:100%}
+
+  .pr{grid-template-columns:58px 1fr}
+  .pl{padding:5px 6px}
+  .pin{padding:3px 5px}
+
+  .lg,.mg{grid-template-columns:1fr}
+
+  .ab{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
+  .abl,.abr{justify-content:space-between}
+  .abr .btn,.abl .btn{flex:1}
+
+  .rin-wrap{padding:10px 12px;gap:10px}
+  .rin-in{width:100%}
+}
+
 /* PRINT */
 @media print{
   @page{size:A4 portrait;margin:7mm 9mm}
