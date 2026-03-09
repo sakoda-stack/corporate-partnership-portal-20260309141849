@@ -75,9 +75,15 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
 .sw:focus-within{border-bottom-color:var(--ac)}
 .sin{flex:1;border:none;background:transparent;font-family:var(--fs);font-size:15px;color:var(--t1);padding:5px 0;outline:none}
 .sin::placeholder{color:var(--t3);font-size:13px}
-.selc{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;border:1px solid var(--acl);background:rgba(139,115,85,.06)}
+.selc{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;padding:8px 10px;border:1px solid var(--acl);background:rgba(139,115,85,.06)}
+.selc-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .selc-l{font-size:10px;letter-spacing:.08em;color:var(--t2);white-space:nowrap}
-.selc-v{font-size:12px;font-weight:500;color:var(--ac);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.selc-v{font-size:12px;font-weight:600;color:var(--ac)}
+.selc-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+.selc-item{display:flex;gap:6px;min-width:0;font-size:11px;color:var(--t2)}
+.selc-k{white-space:nowrap;color:var(--t3)}
+.selc-val{color:var(--t1);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.selc-val.hi{font-weight:700;color:#111}
 
 /* 特典額クイック計算 */
 .qc{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -316,6 +322,7 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
   .sr{flex-direction:column;align-items:stretch}
   .sw{width:100%}
   .sr .btn{width:100%}
+  .selc-meta{grid-template-columns:1fr}
   .qc{padding:10px 12px;gap:10px}
   .qc-ttl{width:100%}
   .qc-grp{width:100%;justify-content:space-between}
@@ -410,9 +417,12 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
       <div class="mtab" id="tab2" onclick="setMode('dept')">提携窓口会社名で検索</div>
     </div>
     <div class="selc hidden" id="selCoBox">
-      <div class="selc-l">Selected Company</div>
+      <div class="selc-h">
+        <div class="selc-l">選択中の企業</div>
+        <button class="btn bs bxs" type="button" onclick="clearSelectedCompany()">クリア</button>
+      </div>
       <div class="selc-v" id="selCoName">-</div>
-      <button class="btn bs bxs" type="button" onclick="clearSelectedCompany()">Clear</button>
+      <div class="selc-meta" id="selCoMeta"></div>
     </div>
     <div class="sr">
       <div class="sw">
@@ -462,7 +472,6 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
         <th style="min-width:55px">特典率</th>
         <th style="min-width:55px">手数料率</th>
         <th style="min-width:88px">確認方法</th>
-        <th style="min-width:46px"></th>
       </tr></thead>
       <tbody id="coBody"></tbody>
     </table>
@@ -1221,15 +1230,31 @@ function clrSearch() { document.getElementById('srchIn').value=''; renderTbl('')
 function updateSelectedCompanyBox() {
   const box = document.getElementById('selCoBox');
   const name = document.getElementById('selCoName');
-  if (!box || !name) return;
+  const meta = document.getElementById('selCoMeta');
+  if (!box || !name || !meta) return;
   if (!selectedCo) {
     name.textContent = '-';
+    meta.innerHTML = '';
     box.classList.add('hidden');
     return;
   }
-  name.textContent = selectedCo.dept
-    ? `${selectedCo.name} / ${selectedCo.dept}`
-    : selectedCo.name;
+  name.textContent = selectedCo.name || '-';
+  const contactValue = [selectedCo.contact, selectedCo.phone, selectedCo.phone2]
+    .filter(Boolean)
+    .join(' / ');
+  const deadlineValue = selectedCo.deadline || '-';
+  const details = [
+    { label: '勤め先', value: selectedCo.name || '-' },
+    { label: '提携窓口', value: selectedCo.dept || '-' },
+    { label: '特典料率', value: pct(selectedCo.rate) },
+    { label: '手数料率', value: pct(selectedCo.fee) },
+    { label: '紹介状提出期限', value: deadlineValue, highlight: deadlineValue.includes('初回来場') },
+    { label: '確認方法', value: selectedCo.confirm || '-' },
+    { label: '連絡先', value: contactValue || '-' },
+  ];
+  meta.innerHTML = details
+    .map((item) => `<div class="selc-item"><span class="selc-k">${esc(item.label)}</span><span class="selc-val${item.highlight ? ' hi' : ''}">${esc(item.value)}</span></div>`)
+    .join('');
   box.classList.remove('hidden');
 }
 
@@ -1285,10 +1310,8 @@ function renderTbl(q) {
         <td class="tac">${pct(c.rate)}</td>
         <td class="tac">${pct(c.fee)}</td>
         <td class="td2" style="font-size:10.5px">${esc(c.confirm)}</td>
-        <td><button class="btn bp bxs"
-          onclick="selByIdx(${i},'${esc(q)}');event.stopPropagation()">選択</button></td>
-      </tr>`).join('') +
-    (res.length>MAX ? `<tr><td colspan="8" style="text-align:center;padding:9px;font-size:11px;color:var(--t3)">
+              </tr>`).join('') +
+    (res.length>MAX ? `<tr><td colspan="7" style="text-align:center;padding:9px;font-size:11px;color:var(--t3)">
       ＊${res.length.toLocaleString()}件中${MAX}件表示。絞り込んでください。</td></tr>` : '');
 }
 
@@ -1334,6 +1357,8 @@ function previewCo(idx, q) {
   const res = getFilteredCompanies(q);
   const c = res[idx]; if (!c) return;
   co = c;  // グローバルに保持（選択後の計算に使用）
+  selectedCo = c;
+  updateSelectedCompanyBox();
   recalcQC();
   // QCのレート注記を目立たせる
   const note = document.getElementById('qcRateNote');
