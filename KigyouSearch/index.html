@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -75,39 +75,45 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
 .sw:focus-within{border-bottom-color:var(--ac)}
 .sin{flex:1;border:none;background:transparent;font-family:var(--fs);font-size:15px;color:var(--t1);padding:5px 0;outline:none}
 .sin::placeholder{color:var(--t3);font-size:13px}
-.selc{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;padding:8px 10px;border:1px solid var(--acl);background:rgba(139,115,85,.06)}
-.selc-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.selc-l{font-size:10px;letter-spacing:.08em;color:var(--t2);white-space:nowrap}
-.selc-v{font-size:12px;font-weight:600;color:var(--ac)}
-.selc-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
-.selc-item{display:flex;gap:6px;min-width:0;font-size:11px;color:var(--t2)}
-.selc-k{white-space:nowrap;color:var(--t3)}
-.selc-val{color:var(--t1);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.selc{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;padding:9px 12px;border:1px solid rgba(139,115,85,.18);background:linear-gradient(135deg,rgba(250,248,243,.96),rgba(255,255,255,.98))}
+.selc-h{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.selc-l{font-size:10px;letter-spacing:.14em;color:var(--t2);white-space:nowrap}
+.selc-main{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px}
+.selc-v{display:inline-block;font-family:var(--ff);font-size:15px;line-height:1.25;font-weight:600;color:var(--t1);letter-spacing:.03em;margin-right:10px}
+.selc-sub{display:inline-block;font-size:12px;color:var(--t2);white-space:nowrap}
+.selc-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}
+.selc-item{display:flex;flex-direction:column;gap:2px;min-width:0;padding-top:6px;border-top:1px solid rgba(198,192,184,.7)}
+.selc-k{white-space:nowrap;color:var(--t3);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.selc-val{color:var(--t1);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
 .selc-val.hi{font-weight:700;color:#111}
+.selc-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px}
 
 /* 特典額クイック計算 */
-.qc{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.qc-ttl{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--t2);white-space:nowrap}
+.qc{background:linear-gradient(180deg,#FCFBF8 0%,#F7F3EC 100%);border:1px solid var(--bd);border-top:none;padding:14px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.qc-ttl{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--t2);white-space:nowrap}
 .qc-grp{display:flex;align-items:center;gap:7px}
+.qc-stack{display:flex;align-items:center;gap:10px;width:100%;padding-top:8px;border-top:1px solid rgba(198,192,184,.7)}
 .qc-in{width:140px;border:1px solid var(--bd);border-radius:var(--r);padding:5px 8px;font-family:var(--fs);font-size:13px;outline:none;transition:border-color var(--tr);background:var(--cs)}
 .qc-in:focus{border-color:var(--ac)}
 .qc-lbl{font-size:11px;color:var(--t2);white-space:nowrap}
-.qc-sep{height:22px;width:1px;background:var(--bd)}
-.qc-res{font-size:16px;font-weight:300;font-family:var(--ff);color:var(--ac)}
+.qc-sep{height:28px;width:1px;background:var(--bd)}
+.qc-res{font-size:30px;font-weight:400;font-family:var(--ff);color:var(--ac);line-height:1;min-width:118px}
 .qc-res.p{font-size:12px;font-weight:400;font-family:var(--fs);color:var(--t3)}
-.qc-note{font-size:10.5px;color:var(--t3);margin-left:auto}
+.qc #qcResult{display:inline-flex;align-items:center;min-height:42px;padding:0;min-width:150px}
+.qc #qcFeeResult{min-width:110px;font-size:13px;font-weight:500;font-family:var(--fs);color:var(--t2)}
+.qc-note{font-size:10.5px;color:var(--t3);margin-left:auto;text-align:right}
 
 /* TABLE */
 .rm{display:flex;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd)}
 .rc{font-size:11.5px;color:var(--t2)}.rc strong{font-size:16px;font-weight:500;color:var(--t1);margin:0 2px}
 .tw{background:var(--cs);border:1px solid var(--bd);border-top:none;overflow-x:auto}
-.ct{width:100%;border-collapse:collapse;font-size:12px}
+.ct{width:100%;border-collapse:collapse;font-size:11px}
 .ct thead tr{background:#EDEAE4}
-.ct th{padding:7px 10px;font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--t2);text-align:left;border-bottom:1px solid var(--bm);white-space:nowrap}
-.ct td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.ct th{padding:6px 8px;font-size:9.5px;font-weight:500;letter-spacing:.08em;color:var(--t2);text-align:left;border-bottom:1px solid var(--bm);white-space:nowrap}
+.ct td{padding:7px 8px;border-bottom:1px solid var(--bd);vertical-align:middle;font-size:10.5px;white-space:nowrap}
 .ct tbody tr:last-child td{border-bottom:none}
 .ct tbody tr:hover td{background:var(--hv);cursor:pointer}
-.tn{font-weight:500;font-size:12.5px}.td2{font-size:11.5px;color:var(--t2)}
+.tn{font-weight:500;font-size:11.5px;white-space:nowrap}.td2{font-size:10.5px;color:var(--t2);white-space:nowrap}
 .tac{color:var(--ac);font-weight:500}
 .nr{background:var(--cs);border:1px solid var(--bd);border-top:none;text-align:center;padding:50px;color:var(--t3);font-size:13px}
 
@@ -134,10 +140,10 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
 .fh{font-size:10.5px;color:var(--t3);line-height:1.45}
 
 /* 計算バナー */
-.cbanner{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:10px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.cbanner{background:var(--bg);border:1px solid var(--bd);border-top:none;padding:12px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .cbi{display:flex;align-items:baseline;gap:6px}
 .cbl{font-size:11px;color:var(--t2);white-space:nowrap}
-.cbv{font-size:18px;font-weight:300;color:var(--ac);font-family:var(--ff)}
+.cbv{font-size:30px;font-weight:400;color:var(--ac);font-family:var(--ff);line-height:1;min-width:140px;display:inline-block}
 .cbv.p{font-size:12.5px;font-weight:400;font-family:var(--fs);color:var(--t3)}
 .cb-sep{height:26px;width:1px;background:var(--bd)}
 .cbsub{font-size:10px;color:var(--t3);margin-left:auto}
@@ -290,6 +296,7 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
   .hd{padding:0 16px}
   .sb{padding:0 16px;overflow-x:auto;overflow-y:hidden}
   .lay{padding:18px 16px 40px}
+  .selc-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dpb{grid-template-columns:repeat(2,1fr)}
   .g3,.g4{grid-template-columns:1fr 1fr}
   .s3,.s4{grid-column:span 2}
@@ -322,13 +329,18 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
   .sr{flex-direction:column;align-items:stretch}
   .sw{width:100%}
   .sr .btn{width:100%}
+   .selc{padding:9px 10px}
+   .selc-v{font-size:15px}
+   .selc-sub{font-size:12px}
   .selc-meta{grid-template-columns:1fr}
   .qc{padding:10px 12px;gap:10px}
   .qc-ttl{width:100%}
   .qc-grp{width:100%;justify-content:space-between}
+  .qc-stack{width:100%;flex-direction:column;align-items:stretch}
   .qc-in{width:100%;max-width:170px}
   .qc-sep{display:none}
-  .qc-note{margin-left:0}
+  .qc #qcResult{width:100%;justify-content:flex-start;min-width:0}
+  .qc-note{margin-left:0;text-align:left}
 
   .rm{padding:6px 0}
   .rc{font-size:11px}
@@ -419,9 +431,10 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
     <div class="selc hidden" id="selCoBox">
       <div class="selc-h">
         <div class="selc-l">選択中の企業</div>
-        <button class="btn bs bxs" type="button" onclick="clearSelectedCompany()">クリア</button>
+        <button class="btn bp bxs" type="button" onclick="proceedFromSearch()">契約情報記入</button>
       </div>
       <div class="selc-v" id="selCoName">-</div>
+      <div class="selc-sub" id="selWorkplace">-</div>
       <div class="selc-meta" id="selCoMeta"></div>
     </div>
     <div class="sr">
@@ -448,15 +461,14 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
       <span class="qc-lbl">→　特典額</span>
       <span class="qc-res p" id="qcResult">価格を入力してください</span>
     </div>
-    <div class="qc-sep"></div>
-    <div class="qc-grp">
-      <span class="qc-lbl">建物消費税（万円）</span>
-      <input type="number" class="qc-in" id="qcTax" placeholder="例：217.5"
-        oninput="recalcQC()">
-    </div>
-    <div class="qc-grp">
-      <span class="qc-lbl">→　手数料額</span>
-      <span class="qc-res p" id="qcFeeResult">消費税も入力</span>
+    <div class="qc-stack">
+      <div class="qc-grp">
+        <span class="qc-lbl">建物消費税（万円）</span>
+        <input type="number" class="qc-in" id="qcTax" placeholder="例：217.5"
+          oninput="recalcQC()">
+        <span class="qc-lbl">→　手数料額</span>
+        <span class="qc-res p" id="qcFeeResult">消費税も入力</span>
+      </div>
     </div>
     <div class="qc-note" id="qcRateNote">特典率 0.5%（標準）で計算中</div>
   </div>
@@ -465,13 +477,16 @@ body{font-family:var(--fs);background:var(--cb);color:var(--t1);line-height:1.7;
   <div class="tw">
     <table class="ct" id="coTbl">
       <thead><tr>
-        <th style="min-width:185px">勤め先会社名</th>
-        <th style="min-width:185px">提携窓口会社名</th>
-        <th style="min-width:62px">担当名</th>
-        <th style="min-width:100px">連絡先</th>
-        <th style="min-width:55px">特典率</th>
-        <th style="min-width:55px">手数料率</th>
-        <th style="min-width:88px">確認方法</th>
+        <th>勤め先会社名</th>
+        <th>提携窓口会社名</th>
+        <th>対象確認方法</th>
+        <th>紹介状提出期限</th>
+        <th>特典率</th>
+        <th>手数料率</th>
+        <th>対象者</th>
+        <th>連絡先</th>
+        <th>連絡先②</th>
+        <th>担当名</th>
       </tr></thead>
       <tbody id="coBody"></tbody>
     </table>
@@ -1227,30 +1242,33 @@ function setMode(mode) {
 function doSearch() { renderTbl(document.getElementById('srchIn').value.trim()); }
 function clrSearch() { document.getElementById('srchIn').value=''; renderTbl(''); }
 
+function proceedFromSearch() {
+  if (!selectedCo) {
+    alert('企業を選択してください。');
+    return;
+  }
+  selCo(selectedCo);
+}
+
 function updateSelectedCompanyBox() {
   const box = document.getElementById('selCoBox');
   const name = document.getElementById('selCoName');
+  const workplace = document.getElementById('selWorkplace');
   const meta = document.getElementById('selCoMeta');
-  if (!box || !name || !meta) return;
+  if (!box || !name || !workplace || !meta) return;
   if (!selectedCo) {
     name.textContent = '-';
+    workplace.textContent = '-';
     meta.innerHTML = '';
     box.classList.add('hidden');
     return;
   }
-  name.textContent = selectedCo.name || '-';
-  const contactValue = [selectedCo.contact, selectedCo.phone, selectedCo.phone2]
-    .filter(Boolean)
-    .join(' / ');
+  name.textContent = selectedCo.dept || '-';
+  workplace.textContent = selectedCo.name ? `勤務先 ${selectedCo.name}` : '-';
   const deadlineValue = selectedCo.deadline || '-';
   const details = [
-    { label: '勤め先', value: selectedCo.name || '-' },
-    { label: '提携窓口', value: selectedCo.dept || '-' },
     { label: '特典料率', value: pct(selectedCo.rate) },
-    { label: '手数料率', value: pct(selectedCo.fee) },
     { label: '紹介状提出期限', value: deadlineValue, highlight: deadlineValue.includes('初回来場') },
-    { label: '確認方法', value: selectedCo.confirm || '-' },
-    { label: '連絡先', value: contactValue || '-' },
   ];
   meta.innerHTML = details
     .map((item) => `<div class="selc-item"><span class="selc-k">${esc(item.label)}</span><span class="selc-val${item.highlight ? ' hi' : ''}">${esc(item.value)}</span></div>`)
@@ -1305,13 +1323,16 @@ function renderTbl(q) {
       <tr onclick="previewCo(${i},'${esc(q)}')" style="cursor:pointer">
         <td><div class="tn">${esc(c.name)}</div></td>
         <td class="td2">${esc(c.dept)}</td>
-        <td class="td2">${esc(c.contact)}</td>
-        <td class="td2">${esc(c.phone)}</td>
+        <td class="td2">${esc(c.confirm)}</td>
+        <td class="td2">${esc(c.deadline)}</td>
         <td class="tac">${pct(c.rate)}</td>
         <td class="tac">${pct(c.fee)}</td>
-        <td class="td2" style="font-size:10.5px">${esc(c.confirm)}</td>
+        <td class="td2">${esc(c.target)}</td>
+        <td class="td2">${esc(c.phone)}</td>
+        <td class="td2">${esc(c.phone2)}</td>
+        <td class="td2">${esc(c.contact)}</td>
               </tr>`).join('') +
-    (res.length>MAX ? `<tr><td colspan="7" style="text-align:center;padding:9px;font-size:11px;color:var(--t3)">
+    (res.length>MAX ? `<tr><td colspan="10" style="text-align:center;padding:9px;font-size:11px;color:var(--t3)">
       ＊${res.length.toLocaleString()}件中${MAX}件表示。絞り込んでください。</td></tr>` : '');
 }
 
@@ -1328,7 +1349,7 @@ function recalcQC() {
   const nEl  = document.getElementById('qcRateNote');
 
   nEl.textContent = co
-    ? `${esc(co.name)}：特典率 ${pct(rate)}／手数料率 ${pct(feeR)} で計算中`
+    ? `特典率 ${pct(rate)}／手数料率 ${pct(feeR)} で計算中`
     : '特典率 0.5%（標準・企業未選択）で計算中';
 
   if (pm > 0) {
@@ -1362,7 +1383,7 @@ function previewCo(idx, q) {
   recalcQC();
   // QCのレート注記を目立たせる
   const note = document.getElementById('qcRateNote');
-  note.textContent = `✔ ${c.name}：特典率 ${pct(c.rate)} / 手数料率 ${pct(c.fee)} で計算中（「選択」で次へ）`;
+  note.textContent = `特典率 ${pct(c.rate)} / 手数料率 ${pct(c.fee)} で計算中`;
   note.style.color = 'var(--ac)';
 }
 
@@ -1375,7 +1396,7 @@ function selCo(c) {
   selectedCo = c;
   updateSelectedCompanyBox();
   // パネル更新
-  sv('dpName',    c.name);    sv('dpDept',    c.dept);
+  sv('dpName',    c.dept);    sv('dpDept',    c.name);
   sv('dpContact', c.contact); sv('dpPhone',   c.phone+(c.phone2?' / '+c.phone2:''));
   sv('dpConf',    c.confirm); sv('dpRate',    pct(c.rate));
   sv('dpFee',     pct(c.fee)); sv('dpTgt',    c.target);
@@ -1673,3 +1694,4 @@ function esc(s){
 </script>
 </body>
 </html>
+
