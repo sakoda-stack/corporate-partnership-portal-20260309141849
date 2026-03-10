@@ -33,7 +33,7 @@ const LOGO_ITEMS: LogoItem[] = [
   { id: 12, name: 'NTTExCパートナーズ', file: 'NTT.png' },
   { id: 13, name: 'Accenture', file: 'accenture.jpg' },
   { id: 14, name: 'Bcan', file: 'Bcan.png' },
-  { id: 15, name: '東京都医師協同組合連合会', file: 'toikyouren.png' }
+  { id: 15, name: '東京都医師協同組合連合会', file: 'toikyoren.png' }
 ];
 
 export const LOGOS = LOGO_ITEMS.map((logo) => {
