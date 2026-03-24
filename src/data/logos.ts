@@ -19,7 +19,7 @@ const logoAssetByFile = new Map<string, string>(
 );
 
 const LOGO_ITEMS: LogoItem[] = [
-  { id: 1, name: 'コーサイサービス', file: '防衛省.svg' },
+  { id: 1, name: 'コーサイ・サービス', file: '防衛省.svg' },
   { id: 2, name: '東急ライフィア', file: '東急.png' },
   { id: 3, name: 'ベルス', file: 'BELS.jpg' },
   { id: 4, name: 'リロクラブ', file: 'リロクラブ.jpg' },
@@ -33,7 +33,9 @@ const LOGO_ITEMS: LogoItem[] = [
   { id: 12, name: 'NTTExCパートナーズ', file: 'NTT.png' },
   { id: 13, name: 'Accenture', file: 'accenture.jpg' },
   { id: 14, name: 'Bcan', file: 'Bcan.png' },
-  { id: 15, name: '東京都医師協同組合連合会', file: 'toikyoren.png' }
+  { id: 15, name: '東京都医師協同組合連合会', file: 'toikyoren.png' },
+  { id: 16, name: 'SBアットワーク', file: 'ソフトバンク.png' },
+  { id: 17, name: '三菱電機ライフサービス', file: '三菱電機.png' },
 ];
 
 export const LOGOS = LOGO_ITEMS.map((logo) => {
