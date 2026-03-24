@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 
 const HOUSING_FAIR_TITLE = '✨ベルス主催の住宅相談フェア参加🏠　詳細はコチラclick';
 const HOUSING_FAIR_PATH = `${import.meta.env.BASE_URL}housing-fair/`;
+const HOUSING_FAIR_KEYWORDS = ['\u4f4f\u5b85\u76f8\u8ac7\u30d5\u30a7\u30a2', '\u30b3\u30c1\u30e9click'];
 
 export const TopicsList: React.FC = () => {
   const [topics, setTopics] = useState<Topic[]>(TOPICS);
@@ -145,6 +146,10 @@ export const TopicsList: React.FC = () => {
 };
 
 const resolveTopicHref = (title: string): string | undefined => {
+  if (HOUSING_FAIR_KEYWORDS.every((keyword) => title.includes(keyword))) {
+    return HOUSING_FAIR_PATH;
+  }
+
   if (title === HOUSING_FAIR_TITLE) {
     return HOUSING_FAIR_PATH;
   }
