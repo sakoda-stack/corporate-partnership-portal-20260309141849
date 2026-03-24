@@ -5,7 +5,14 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
+  const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1];
+  const pagesBase = mode === 'production' && repoName ? `/${repoName}/housing-fair/` : '/';
   return {
+    base: pagesBase,
+    build: {
+      outDir: path.resolve(__dirname, '../dist/housing-fair'),
+      emptyOutDir: false,
+    },
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

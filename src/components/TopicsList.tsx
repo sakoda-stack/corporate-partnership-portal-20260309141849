@@ -4,6 +4,9 @@ import { TOPICS, type Topic } from '../constants';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
+const HOUSING_FAIR_TITLE = '✨ベルス主催の住宅相談フェア参加🏠　詳細はコチラclick';
+const HOUSING_FAIR_PATH = `${import.meta.env.BASE_URL}housing-fair/`;
+
 export const TopicsList: React.FC = () => {
   const [topics, setTopics] = useState<Topic[]>(TOPICS);
 
@@ -67,6 +70,7 @@ export const TopicsList: React.FC = () => {
               tag: resolvedTag || undefined,
               title,
               isNew: resolvedIsNew,
+              href: resolveTopicHref(title),
             } as Topic;
           })
           .filter((topic): topic is Topic => topic !== null);
@@ -100,13 +104,20 @@ export const TopicsList: React.FC = () => {
 
         <div className="mt-2 space-y-1.5">
           {topics.slice(0, 5).map((topic, index) => (
-            <motion.div
+            <motion.a
               key={topic.id}
+              href={topic.href ?? '#'}
+              onClick={(event) => {
+                if (!topic.href) {
+                  event.preventDefault();
+                }
+              }}
+              aria-disabled={!topic.href}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.04 }}
-              className="group cursor-pointer border-b border-stone-200/80 px-1 py-3 transition duration-200 hover:border-stone-300"
+              className="group block border-b border-stone-200/80 px-1 py-3 transition duration-200 hover:border-stone-300"
             >
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-5">
                 <div className="flex items-center gap-3 md:w-44 md:shrink-0">
@@ -125,12 +136,20 @@ export const TopicsList: React.FC = () => {
                   <ChevronRight size={14} className="shrink-0 text-stone-300 transition-all group-hover:translate-x-1 group-hover:text-stone-700" />
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>
     </section>
   );
+};
+
+const resolveTopicHref = (title: string): string | undefined => {
+  if (title === HOUSING_FAIR_TITLE) {
+    return HOUSING_FAIR_PATH;
+  }
+
+  return undefined;
 };
 
 const findColumnIndex = (headerRow: (string | number | Date | null)[], candidates: string[]): number => {

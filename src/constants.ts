@@ -41,7 +41,8 @@ export const LOGOS = [
   { id: 12, name: 'NTTExcパートナーズ', url: withBase('rogo/NTT.png') },
   { id: 13, name: 'アクセンチュア', url: withBase('rogo/accenture.jpg') },
   { id: 14, name: 'Bcan', url: withBase('rogo/Bcan.png') },
-
+  { id: 15, name: 'SBアットワーク', url: withBase('rogo/ソフトバンク.png') },
+  { id: 16, name: '三菱電機ライフサービス', url: withBase('rogo/三菱電機.png') },
 ];
 
 export type Topic = {
@@ -51,6 +52,7 @@ export type Topic = {
   tag?: string;
   title: string;
   isNew: boolean;
+  href?: string;
 };
 
 export const TOPICS: Topic[] = [
