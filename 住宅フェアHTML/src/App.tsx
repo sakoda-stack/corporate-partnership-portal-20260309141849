@@ -216,7 +216,7 @@ export default function App() {
             <div className="pt-8 border-t border-stone-200">
               <span className="text-amber-600 text-[10px] uppercase tracking-[0.3em] font-bold block mb-4">Next Event</span>
               <p className="text-stone-900 text-lg font-serif">
-                次回開催：2026年7月20日（月）
+                次回開催：2026年7月12日（日）
               </p>
             </div>
           </motion.div>
